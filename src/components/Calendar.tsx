@@ -45,71 +45,124 @@ const Calendar: React.FC<CalendarProps> = ({
   const getEventsForDate = (date: Date) =>
     events.filter(event => event.date.toDateString() === date.toDateString());
 
-  const days = [];
+  // Prepara un array plano con blanks y días
+  const cells: ({ type: 'blank' } | { type: 'day', date: Date, dayNum: number, events: EventType[] })[] = [];
+  for (let i = 0; i < startDay; i++) {
+    cells.push({ type: 'blank' });
+  }
   for (let i = 1; i <= daysInMonth; i++) {
     const date = new Date(year, month, i);
-    const dailyEvents = getEventsForDate(date);
+    cells.push({
+      type: 'day',
+      date,
+      dayNum: i,
+      events: getEventsForDate(date),
+    });
+  }
+  while (cells.length % 7 !== 0) {
+    cells.push({ type: 'blank' });
+  }
 
-    // Calcular el índice de columna (0=Lun, ..., 6=Dom)
-    const colIdx = (startDay + i - 1) % 7;
+  // Renderiza el grid, calculando el colIdx real para cada celda
+  const calendarCells = cells.map((cell, idx) => {
+    const colIdx = idx % 7;
     const isWeekend = colIdx === 5 || colIdx === 6;
 
-    days.push(
+    if (cell.type === 'blank') {
+      return <div key={`blank-${idx}`} className="bg-transparent" />;
+    }
+    const { date, dayNum, events } = cell;
+    return (
       <div
-        key={i}
+        key={`day-${idx}`}
         className={`card p-2 flex flex-col items-start min-h-[80px] transition-colors
           ${isToday(date) ? 'border-2 border-primary bg-primary/10' : ''}
           ${isWeekend ? 'bg-warning/10' : 'bg-base-100'}
           hover:bg-base-200 shadow-sm`}
       >
-        <div className={`font-bold ${isToday(date) ? 'text-primary' : ''}`}>{i}</div>
-        {dailyEvents.map((event, idx) => (
-          <div key={idx} className="badge badge-primary mt-1">{event.title}</div>
+        <div className={`font-bold ${isToday(date) ? 'text-primary' : ''}`}>{dayNum}</div>
+        {events.map((event, eidx) => (
+          <div key={eidx} className="badge badge-primary mt-1">{event.title}</div>
         ))}
       </div>
     );
-  }
-
-  // Unir celdas vacías y días
-  const calendarCells = [...blanks, ...days];
-
-  // Rellenar la última semana si es necesario
-  while (calendarCells.length % 7 !== 0) {
-    calendarCells.push(<div key={`end-blank-${calendarCells.length}`} className="bg-transparent" />);
-  }
+  });
 
   // Botón para ir a hoy
   const goToToday = () => {
     onMonthChange(new Date(today.getFullYear(), today.getMonth(), 1));
   };
 
+  // Selectores de mes y año
+  const months = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+  const years = Array.from({ length: 21 }, (_, i) => today.getFullYear() - 10 + i);
+
+  const handleMonthSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onMonthChange(new Date(year, parseInt(e.target.value), 1));
+  };
+
+  const handleYearSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onMonthChange(new Date(parseInt(e.target.value), month, 1));
+  };
+
   return (
     <div>
-      <div className="flex justify-between items-center mb-4 gap-2 flex-wrap">
+      <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
+        {/* Flecha Mes Anterior */}
         <button
-          className="btn btn-sm btn-outline"
-          onClick={() =>
-            onMonthChange(new Date(year, month - 1, 1))
-          }
+          className="btn btn-sm btn-ghost rounded-full p-2 hover:bg-base-200 transition"
+          onClick={() => onMonthChange(new Date(year, month - 1, 1))}
+          aria-label="Mes anterior"
+          style={{ minWidth: 36, minHeight: 36 }}
         >
-          &#8592; Anterior
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+            <path d="M15 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
-        <span className="text-lg font-semibold capitalize">
-          {currentMonth.toLocaleString('es-ES', { month: 'long', year: 'numeric' })}
-        </span>
+
+        {/* Selectores Mes y Año + Hoy */}
+        <div className="flex items-center gap-2 mx-2 flex-1 justify-center">
+          <select
+            className="select select-sm max-w-[120px]"
+            value={month}
+            onChange={handleMonthSelect}
+          >
+            {months.map((m, idx) => (
+              <option key={m} value={idx}>{m}</option>
+            ))}
+          </select>
+          <select
+            className="select select-sm max-w-[90px]"
+            value={year}
+            onChange={handleYearSelect}
+          >
+            {years.map(y => (
+              <option key={y} value={y}>{y}</option>
+            ))}
+          </select>
+          <button
+            className="btn btn-link btn-xs px-2 py-0 ml-1"
+            style={{ minHeight: 0, height: 28 }}
+            onClick={goToToday}
+            type="button"
+          >
+            Hoy
+          </button>
+        </div>
+
+        {/* Flecha Mes Siguiente */}
         <button
-          className="btn btn-sm btn-outline"
-          onClick={() =>
-            onMonthChange(new Date(year, month + 1, 1))
-          }
+          className="btn btn-sm btn-ghost rounded-full p-2 hover:bg-base-200 transition"
+          onClick={() => onMonthChange(new Date(year, month + 1, 1))}
+          aria-label="Mes siguiente"
+          style={{ minWidth: 36, minHeight: 36 }}
         >
-          Siguiente &#8594;
-        </button>
-        <button
-          className="btn btn-sm btn-primary ml-2"
-          onClick={goToToday}
-        >
-          Hoy
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+            <path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
       </div>
       {/* Nombres de los días */}
