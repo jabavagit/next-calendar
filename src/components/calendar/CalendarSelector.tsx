@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import TooltipInput from '../calendarSelector/TooltipInput';
 
 interface CalendarType {
   id: number;
@@ -9,7 +10,7 @@ interface CalendarType {
 interface CalendarSelectorProps {
   calendars: CalendarType[];
   selectedCalendarId: number | null;
-  setSelectedCalendarId: (id: number) => void;
+  setSelectedCalendarId: (id: number | null) => void;
   setCalendars: React.Dispatch<React.SetStateAction<CalendarType[]>>;
 }
 
@@ -96,9 +97,10 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
       <div className="mb-4 flex items-center gap-2">
         <div className="relative">
           <button
-            className="btn btn-xs btn-accent flex items-center"
+            className="btn btn-sm btn-accent flex items-center h-9 rounded-l-md rounded-r-none"
             onClick={() => setShowInput(true)}
             title="Crear calendario"
+            style={{ minHeight: '36px' }}
           >
             <span className="text-lg font-bold">+</span>
           </button>
@@ -108,16 +110,17 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
               className="absolute left-1/2 z-20 -translate-x-1/2 mt-2 bg-base-100 p-5 rounded shadow border flex gap-3 items-center min-w-[320px]"
             >
               <input
-                className="input input-sm flex-1"
+                className="input input-sm flex-1 h-9"
                 placeholder="Nuevo calendario"
                 value={newCalendarName}
                 onChange={e => setNewCalendarName(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') handleCreateCalendar(); }}
                 autoFocus
+                style={{ minHeight: '36px' }}
               />
               <div className="flex gap-0">
-                <button className="btn btn-sm btn-success rounded-none rounded-l" onClick={handleCreateCalendar}>Crear</button>
-                <button className="btn btn-sm btn-ghost rounded-none rounded-r" onClick={() => setShowInput(false)}>✖</button>
+                <button className="btn btn-sm btn-success h-9 rounded-none rounded-l-md" onClick={handleCreateCalendar}>Crear</button>
+                <button className="btn btn-sm btn-ghost h-9 rounded-none rounded-r-md" onClick={() => setShowInput(false)}>✖</button>
               </div>
             </div>
           )}
@@ -133,7 +136,8 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
   return (
     <div className="mb-4 flex items-center gap-0">
       <select
-        className="select select-sm"
+        className="select select-sm h-9 rounded-l-md rounded-r-none focus:outline-none focus: focus:ring-primary focus:border-primary bg-accent/10 text-neutral"
+        style={{ minHeight: '36px', borderRight: '0' }}
         value={currentId}
         onChange={e => setSelectedCalendarId(Number(e.target.value))}
       >
@@ -141,86 +145,73 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
           <option key={cal.id} value={cal.id}>{cal.name}</option>
         ))}
       </select>
-      {/* Botón + con tooltip */}
+      {/* Botón + con TooltipInput */}
       <div className="relative">
         <button
-          className="btn btn-xs btn-accent flex items-center rounded-none rounded-l"
+          className="btn btn-sm btn-accent flex items-center h-9 rounded-none"
           onClick={() => setShowInput(true)}
           title="Crear calendario"
+          style={{ minHeight: '36px' }}
         >
           <span className="text-lg font-bold">+</span>
         </button>
-        {showInput && (
-          <div
-            ref={inputTooltipRef}
-            className="absolute left-1/2 z-20 -translate-x-1/2 mt-2 bg-base-100 p-5 rounded shadow border flex gap-3 items-center min-w-[320px]"
-          >
-            <input
-              className="input input-sm flex-1"
-              placeholder="Nuevo calendario"
-              value={newCalendarName}
-              onChange={e => setNewCalendarName(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter') handleCreateCalendar(); }}
-              autoFocus
-            />
-            <div className="flex gap-0">
-              <button className="btn btn-sm btn-success rounded-none rounded-l" onClick={handleCreateCalendar}>Crear</button>
-              <button className="btn btn-sm btn-ghost rounded-none rounded-r" onClick={() => setShowInput(false)}>✖</button>
-            </div>
-          </div>
-        )}
+        <TooltipInput
+          open={showInput}
+          onClose={() => setShowInput(false)}
+          value={newCalendarName}
+          onChange={setNewCalendarName}
+          onConfirm={handleCreateCalendar}
+          onCancel={() => setShowInput(false)}
+          confirmLabel="Crear"
+          cancelLabel="✖"
+          placeholder="Nuevo calendario"
+          inputClassName="input input-sm flex-1 h-9 rounded-none focus:outline-none focus: focus:ring-primary focus:border-primary"
+        />
       </div>
-      {/* Editar con tooltip */}
+      {/* Editar con TooltipInput */}
       <div className="relative">
         <button
-          className="btn btn-xs btn-ghost rounded-none"
+          className="btn btn-sm btn-ghost h-9 rounded-none"
           title="Renombrar"
+          style={{ minHeight: '36px' }}
           onClick={() => {
             setEditingCalendarId(currentId);
             setEditingCalendarName(currentCalendar?.name || '');
           }}
         >✏️</button>
-        {editingCalendarId === currentId && (
-          <div
-            ref={editTooltipRef}
-            className="absolute left-1/2 z-20 -translate-x-1/2 mt-2 bg-base-100 p-5 rounded shadow border flex gap-3 items-center min-w-[320px]"
-          >
-            <input
-              className="input input-sm flex-1"
-              value={editingCalendarName}
-              onChange={e => setEditingCalendarName(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter') handleRenameCalendar(currentId);
-              }}
-              autoFocus
-            />
-            <div className="flex gap-0">
-              <button className="btn btn-sm btn-success rounded-none rounded-l" onClick={() => handleRenameCalendar(currentId)}>✔</button>
-              <button className="btn btn-sm btn-ghost rounded-none rounded-r" onClick={() => setEditingCalendarId(null)}>✖</button>
-            </div>
-          </div>
-        )}
+        <TooltipInput
+          open={editingCalendarId === currentId}
+          onClose={() => setEditingCalendarId(null)}
+          value={editingCalendarName}
+          onChange={setEditingCalendarName}
+          onConfirm={() => handleRenameCalendar(currentId)}
+          onCancel={() => setEditingCalendarId(null)}
+          confirmLabel="✔"
+          cancelLabel="✖"
+          placeholder="Renombrar calendario"
+        />
       </div>
-      {/* Eliminar con tooltip de confirmación */}
+      {/* Eliminar con TooltipInput para confirmación */}
       {calendars.length > 1 && (
         <div className="relative">
           <button
-            className="btn btn-xs btn-ghost rounded-none rounded-r"
+            className="btn btn-sm btn-ghost h-9 rounded-none rounded-r-md"
             title="Borrar"
+            style={{ minHeight: '36px' }}
             onClick={() => setShowDeleteConfirm(true)}
           >🗑️</button>
-          {showDeleteConfirm && (
-            <div
-              ref={deleteTooltipRef}
-              className="absolute left-1/2 z-20 -translate-x-1/2 mt-2 bg-base-100 p-5 rounded shadow border flex flex-col items-center min-w-[320px]"
-            >
-              <span className="mb-3 text-base">¿Eliminar calendario?</span>
-              <div className="flex gap-0">
-                <button className="btn btn-sm btn-error rounded-none rounded-l" onClick={() => handleDeleteCalendar(currentId)}>Sí</button>
-                <button className="btn btn-sm btn-ghost rounded-none rounded-r" onClick={() => setShowDeleteConfirm(false)}>No</button>
-              </div>
-            </div>
-          )}
+          <TooltipInput
+            open={showDeleteConfirm}
+            onClose={() => setShowDeleteConfirm(false)}
+            value=""
+            onChange={() => {}}
+            onConfirm={() => handleDeleteCalendar(currentId)}
+            onCancel={() => setShowDeleteConfirm(false)}
+            confirmLabel="Sí"
+            cancelLabel="No"
+          >
+            <span className="ml-3 text-base">¿Eliminar calendario?</span>
+          </TooltipInput>
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Calendar from './Calendar';
-import Navbar from './Navbar';
-import CalendarSelector from './CalendarSelector';
+import Calendar from '../calendar/Calendar';
+import Navbar from '../layout/Navbar';
+import CalendarSelector from '../calendar/CalendarSelector';
 
 interface EventType {
     id: number;
@@ -19,9 +19,16 @@ interface CalendarType {
 const Dashboard: React.FC = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [calendars, setCalendars] = useState<CalendarType[]>([
-        { id: 1, name: 'Laboral', events: [] }
+        {
+            id: 1,
+            name: 'Laboral',
+            events: [
+                { id: 1, title: 'Turno de mañana', date: new Date(2025, 4, 14) }, // 14 mayo 2025
+                { id: 2, title: 'Turno de mañana', date: new Date(2025, 4, 15) }, // 15 mayo 2025
+            ]
+        }
     ]);
-    const [selectedCalendarId, setSelectedCalendarId] = useState<number>(1);
+    const [selectedCalendarId, setSelectedCalendarId] = useState<number | null>(1);
     const [newCalendarName, setNewCalendarName] = useState('');
     const [editingCalendarId, setEditingCalendarId] = useState<number | null>(null);
     const [editingCalendarName, setEditingCalendarName] = useState('');
@@ -37,6 +44,32 @@ const Dashboard: React.FC = () => {
             cals.map(cal =>
                 cal.id === selectedCalendarId
                     ? { ...cal, events: [...cal.events, event] }
+                    : cal
+            )
+        );
+    };
+
+    const handleEditEvent = (event: EventType) => {
+        setCalendars(cals =>
+            cals.map(cal =>
+                cal.id === selectedCalendarId
+                    ? {
+                        ...cal,
+                        events: cal.events.map(ev => ev.id === event.id ? event : ev)
+                    }
+                    : cal
+            )
+        );
+    };
+
+    const handleDeleteEvent = (event: EventType) => {
+        setCalendars(cals =>
+            cals.map(cal =>
+                cal.id === selectedCalendarId
+                    ? {
+                        ...cal,
+                        events: cal.events.filter(ev => ev.id !== event.id)
+                    }
                     : cal
             )
         );
@@ -83,6 +116,8 @@ const Dashboard: React.FC = () => {
                             events={selectedCalendar.events}
                             onMonthChange={handleMonthChange}
                             onAddEvent={handleAddEvent}
+                            onEditEvent={handleEditEvent}
+                            onDeleteEvent={handleDeleteEvent}
                         />
                     )}
                 </div>
