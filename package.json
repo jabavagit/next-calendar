@@ -3,26 +3,29 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run cache:clean && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "cache:clean": "rm -rf .next"
   },
   "dependencies": {
-    "daisyui": "^5.0.43",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "autoprefixer": "^10.4.21",
+    "next": "15.3.3",
+    "postcss": "^8.5.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4.1.8",
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "autoprefixer": "^10.4.21",
-    "eslint": "latest",
-    "eslint-config-next": "latest",
-    "postcss": "^8.5.4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "daisyui": "^5.0.43",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.3",
     "tailwindcss": "^4.1.8",
-    "typescript": "latest"
+    "typescript": "^5"
   }
 }

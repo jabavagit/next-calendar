@@ -2,9 +2,9 @@ import { Html, Head, Main, NextScript } from 'next/document';
 
 export default function Document() {
   return (
-    <Html data-theme="light">
+    <Html >
       <Head />
-      <body>
+      <body lang="en" data-theme="corporate">
         <Main />
         <NextScript />
       </body>

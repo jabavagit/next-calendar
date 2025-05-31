@@ -1,20 +1,10 @@
 import React, { useState } from 'react';
 import Calendar from '../calendar/Calendar';
 import Navbar from '../layout/Navbar';
-import CalendarSelector from '../calendar/CalendarSelector';
+import CalendarSelector from '../calendarSelector/CalendarSelector';
 
-interface EventType {
-    id: number;
-    title: string;
-    date: Date;
-    [key: string]: any;
-}
-
-interface CalendarType {
-    id: number;
-    name: string;
-    events: EventType[];
-}
+// Remove these interfaces from this file and import them from a shared types file instead
+import type { CalendarType, EventType } from '../calendar/types';
 
 const Dashboard: React.FC = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -23,16 +13,15 @@ const Dashboard: React.FC = () => {
             id: 1,
             name: 'Laboral',
             events: [
-                { id: 1, title: 'Turno de mañana', date: new Date(2025, 4, 14) }, // 14 mayo 2025
-                { id: 2, title: 'Turno de mañana', date: new Date(2025, 4, 15) }, // 15 mayo 2025
+                { id: 1, title: 'Turno de mañana', date: new Date(2025, 5, 11), shiftId: 1 },
+                { id: 2, title: 'Turno de mañana', date: new Date(2025, 5, 12), shiftId: 1 },
+            ],
+            shifts: [
+                { id: 1, name: 'Turno Mañana', color: '#e07a5f', horaInicio: '08:00', horaSalida: '15:00' }
             ]
         }
     ]);
     const [selectedCalendarId, setSelectedCalendarId] = useState<number | null>(1);
-    const [newCalendarName, setNewCalendarName] = useState('');
-    const [editingCalendarId, setEditingCalendarId] = useState<number | null>(null);
-    const [editingCalendarName, setEditingCalendarName] = useState('');
-
     const selectedCalendar = calendars.find(c => c.id === selectedCalendarId);
 
     const handleMonthChange = (newMonth: Date) => {
@@ -75,29 +64,8 @@ const Dashboard: React.FC = () => {
         );
     };
 
-    const handleCreateCalendar = () => {
-        if (!newCalendarName.trim()) return;
-        const newId = Math.max(0, ...calendars.map(c => c.id)) + 1;
-        setCalendars([...calendars, { id: newId, name: newCalendarName, events: [] }]);
-        setNewCalendarName('');
-        setSelectedCalendarId(newId);
-    };
-
-    const handleDeleteCalendar = (id: number) => {
-        const filtered = calendars.filter(c => c.id !== id);
-        setCalendars(filtered);
-        if (filtered.length) setSelectedCalendarId(filtered[0].id);
-    };
-
-    const handleRenameCalendar = (id: number) => {
-        setCalendars(cals =>
-            cals.map(cal =>
-                cal.id === id ? { ...cal, name: editingCalendarName } : cal
-            )
-        );
-        setEditingCalendarId(null);
-        setEditingCalendarName('');
-    };
+    // Si necesitas pasar los shifts a Calendar o EventModal, hazlo así:
+    // selectedCalendar?.shifts
 
     return (
         <div className="flex flex-col min-h-screen bg-base-100">
@@ -114,6 +82,7 @@ const Dashboard: React.FC = () => {
                         <Calendar
                             currentMonth={currentMonth}
                             events={selectedCalendar.events}
+                            shifts={selectedCalendar.shifts}
                             onMonthChange={handleMonthChange}
                             onAddEvent={handleAddEvent}
                             onEditEvent={handleEditEvent}

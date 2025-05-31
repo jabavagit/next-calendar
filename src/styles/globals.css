@@ -1,4 +1,5 @@
 @import "tailwindcss";
-@plugin "daisyui";
 
-/* Custom global styles can be added below */
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark, silk, lofy --lofy, cupcake --cupcake, bumblebee --bumblebee, cyberpunk --cyberpunk, retro --retro, valentine --valentine, fantasy --fantasy, winter --winter, autumn --autumn, business --business, acid --acid, corporate --corporate, synthwave --synthwave, dracula --dracula, acid --acid, black --black;
+}

@@ -5,26 +5,30 @@ import CalendarGrid from './CalendarGrid';
 import EventModal from './EventModal';
 import QuickCreateModal from './QuickCreateModal';
 import FloatingActionButton from './FloatingActionButton';
-import { useCalendarLogic, EventType } from '../../hooks/useCalendarLogic';
+import { useCalendarLogic } from '../../hooks/useCalendarLogic';
+import { EventType, ShiftType } from './types';
 
 interface CalendarProps {
   currentMonth: Date;
   events: EventType[];
+  fabPosition?: 'left' | 'right';
+  shifts?: ShiftType[];
   onMonthChange: (newMonth: Date) => void;
   onAddEvent: (event: EventType) => void;
   onEditEvent: (event: EventType) => void;
   onDeleteEvent: (event: EventType) => void;
-  fabPosition?: 'left' | 'right';
 }
 
 const Calendar: React.FC<CalendarProps> = ({
   currentMonth,
   events,
+  fabPosition = 'right',
+  shifts = [],
   onMonthChange,
   onAddEvent,
   onEditEvent,
   onDeleteEvent,
-  fabPosition = 'right',
+
 }) => {
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
@@ -80,6 +84,7 @@ const Calendar: React.FC<CalendarProps> = ({
         onDayClick={logic.handleDayClick}
         onEditEvent={logic.handleEditEvent}
         onDelete={logic.handleDelete}
+        shifts={shifts}
       />
       <FloatingActionButton
         onClick={() => logic.setShowQuickCreate(true)}
@@ -103,7 +108,13 @@ const Calendar: React.FC<CalendarProps> = ({
         editingEvent={logic.editingEvent}
         selectedDate={logic.selectedDate}
         onDelete={logic.editingEvent ? () => { if (logic.editingEvent) logic.handleDelete(logic.editingEvent); } : undefined}
-      />
+        shifts={[]}
+        onAddShiftType={function (shift: ShiftType): void {
+          throw new Error('Function not implemented.');
+        }}
+        setEventShiftType={function (v: string): void {
+          throw new Error('Function not implemented.');
+        }} />
     </div>
   );
 };
