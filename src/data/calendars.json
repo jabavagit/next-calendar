@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "name": "Laboral",
+    "events": [
+      { "id": 1, "title": "Turno de mañana", "date": "2025-06-11", "shiftId": 1 },
+      { "id": 2, "title": "Turno de mañana", "date": "2025-06-12", "shiftId": 1 }
+    ],
+    "shifts": [
+      { "id": 1, "name": "Turno Mañana", "color": "#e07a5f", "horaInicio": "08:00", "horaSalida": "15:00" }
+    ]
+  }
+]

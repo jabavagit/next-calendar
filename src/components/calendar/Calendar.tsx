@@ -39,7 +39,10 @@ const Calendar: React.FC<CalendarProps> = ({
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   const getEventsForDate = (date: Date) =>
-    events.filter((event) => event.date.toDateString() === date.toDateString());
+    events.filter(
+      (event) =>
+        new Date(event.date).toDateString() === date.toDateString()
+    );
 
   const cells: (
     | { type: 'blank' }

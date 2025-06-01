@@ -1,3 +1,4 @@
+import { createCalendar } from '@/services/calendarApi';
 import { CalendarType, SetCalendarsFn, SetSelectedCalendarIdFn } from '@/types/calendarTypes';
 import { useState, useRef, useEffect } from 'react';
 
@@ -48,13 +49,15 @@ export function useCalendarSelector(
     };
   }, [showInput, editingCalendarId, showDeleteConfirm]);
 
-  const handleCreateCalendar = () => {
-    if (!newCalendarName.trim()) return;
-    const newId = Math.max(0, ...calendars.map((c) => c.id)) + 1;
-    setCalendars([...calendars, { id: newId, name: newCalendarName, events: [], shifts: [] }]);
-    setNewCalendarName('');
-    setShowInput(false);
-    setSelectedCalendarId(newId);
+  const handleCreateCalendar = async (newCalendar: Omit<CalendarType, 'id'>) => {
+    try {
+      const created = await createCalendar(newCalendar);
+      setCalendars((prev) => [...prev, created]);
+      setSelectedCalendarId(created.id);
+    } catch (error) {
+      // Maneja el error (puedes mostrar un toast, etc)
+      console.error('Error al crear calendario', error);
+    }
   };
 
   const handleDeleteCalendar = (id: number) => {

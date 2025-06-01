@@ -1,27 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from '../calendar/Calendar';
 import Navbar from '../layout/Navbar';
 import CalendarSelector from '../calendarSelector/CalendarSelector';
-
-// Remove these interfaces from this file and import them from a shared types file instead
-import type { CalendarType, EventType } from '../calendar/types';
+import type { CalendarType, EventType } from '../../types/calendarTypes';
+import { getCalendars, createCalendar, updateCalendar, deleteCalendar } from '../../services/calendarApi';
 
 const Dashboard: React.FC = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [calendars, setCalendars] = useState<CalendarType[]>([
-    {
-      id: 1,
-      name: 'Laboral',
-      events: [
-        { id: 1, title: 'Turno de mañana', date: new Date(2025, 5, 11), shiftId: 1 },
-        { id: 2, title: 'Turno de mañana', date: new Date(2025, 5, 12), shiftId: 1 },
-      ],
-      shifts: [
-        { id: 1, name: 'Turno Mañana', color: '#e07a5f', horaInicio: '08:00', horaSalida: '15:00' },
-      ],
-    },
-  ]);
-  const [selectedCalendarId, setSelectedCalendarId] = useState<number | null>(1);
+  const [calendars, setCalendars] = useState<CalendarType[]>([]);
+  const [selectedCalendarId, setSelectedCalendarId] = useState<number | null>(null);
+
+  useEffect(() => {
+    getCalendars().then((data) => {
+      setCalendars(data);
+      if (data.length > 0) setSelectedCalendarId(data[0].id);
+    });
+  }, []);
+
   const selectedCalendar = calendars.find((c) => c.id === selectedCalendarId);
 
   const handleMonthChange = (newMonth: Date) => {
@@ -71,7 +66,10 @@ const Dashboard: React.FC = () => {
       <main className="flex-grow flex flex-col p-0 m-0 h-full min-h-0">
         <div className="flex-1 flex flex-col h-full min-h-0 px-2 sm:px-4 md:px-8 py-4 sm:py-6 md:py-10">
           <CalendarSelector
-            calendars={calendars}
+            calendars={calendars.map(cal => ({
+              ...cal,
+              shifts: cal.shifts ?? [],
+            }))}
             selectedCalendarId={selectedCalendarId}
             setSelectedCalendarId={setSelectedCalendarId}
             setCalendars={setCalendars}
