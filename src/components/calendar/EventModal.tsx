@@ -23,8 +23,18 @@ interface EventModalProps {
 }
 
 const EventModal: React.FC<EventModalProps> = ({
-  open, onClose, onSave, eventTitle, setEventTitle, editingEvent, selectedDate, onDelete,
-  shifts, onAddShiftType, eventShiftType, setEventShiftType
+  open,
+  onClose,
+  onSave,
+  eventTitle,
+  setEventTitle,
+  editingEvent,
+  selectedDate,
+  onDelete,
+  shifts,
+  onAddShiftType,
+  eventShiftType,
+  setEventShiftType,
 }) => {
   const [newShiftName, setNewShiftName] = useState('');
   const [newShiftColor, setNewShiftColor] = useState('#e07a5f');
@@ -40,18 +50,20 @@ const EventModal: React.FC<EventModalProps> = ({
           className="input input-bordered w-full"
           placeholder="Título del evento"
           value={eventTitle}
-          onChange={e => setEventTitle(e.target.value)}
+          onChange={(e) => setEventTitle(e.target.value)}
           autoFocus
         />
         <label className="block mt-2">Turno</label>
         <select
           className="select select-sm w-full"
           value={eventShiftType || ''}
-          onChange={e => setEventShiftType(e.target.value)}
+          onChange={(e) => setEventShiftType(e.target.value)}
         >
           <option value="">Sin turno</option>
-          {shifts.map(s => (
-            <option key={s.name} value={s.name}>{s.name}</option>
+          {shifts.map((s) => (
+            <option key={s.name} value={s.name}>
+              {s.name}
+            </option>
           ))}
         </select>
         <div className="flex gap-2 mt-2">
@@ -59,12 +71,12 @@ const EventModal: React.FC<EventModalProps> = ({
             className="input input-sm"
             placeholder="Nuevo turno"
             value={newShiftName}
-            onChange={e => setNewShiftName(e.target.value)}
+            onChange={(e) => setNewShiftName(e.target.value)}
           />
           <input
             type="color"
             value={newShiftColor}
-            onChange={e => setNewShiftColor(e.target.value)}
+            onChange={(e) => setNewShiftColor(e.target.value)}
             className="w-10 h-10 p-0 border-none"
           />
           <button

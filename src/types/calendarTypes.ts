@@ -8,8 +8,8 @@ export interface ShiftType {
 
 export interface EventType {
   id: number;
-  date: Date;
   title: string;
+  date: Date;
   shiftId?: number;
 }
 
@@ -17,5 +17,11 @@ export interface CalendarType {
   id: number;
   name: string;
   events: EventType[];
-  shifts?: ShiftType[];
+  shifts: ShiftType[];
 }
+
+// Funciones para setState
+export type SetCalendarsFn = (
+  calendars: CalendarType[] | ((prev: CalendarType[]) => CalendarType[]),
+) => void;
+export type SetSelectedCalendarIdFn = (id: number | null) => void;

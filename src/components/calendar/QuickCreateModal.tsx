@@ -11,7 +11,13 @@ interface QuickCreateModalProps {
 }
 
 const QuickCreateModal: React.FC<QuickCreateModalProps> = ({
-  open, onClose, onCreate, quickEventTitle, setQuickEventTitle, quickEventDate, setQuickEventDate
+  open,
+  onClose,
+  onCreate,
+  quickEventTitle,
+  setQuickEventTitle,
+  quickEventDate,
+  setQuickEventDate,
 }) => {
   if (!open) return null;
   return (
@@ -22,14 +28,14 @@ const QuickCreateModal: React.FC<QuickCreateModalProps> = ({
           className="input input-bordered w-full"
           placeholder="Título del evento"
           value={quickEventTitle}
-          onChange={e => setQuickEventTitle(e.target.value)}
+          onChange={(e) => setQuickEventTitle(e.target.value)}
           autoFocus
         />
         <input
           className="input input-bordered w-full"
           type="date"
           value={quickEventDate}
-          onChange={e => setQuickEventDate(e.target.value)}
+          onChange={(e) => setQuickEventDate(e.target.value)}
         />
         <div className="flex gap-2 mt-2">
           <button className="btn btn-primary btn-sm" onClick={onCreate}>

@@ -1,8 +1,12 @@
 import { EventType } from '@/components/calendar/types';
 import { useState } from 'react';
 
-
-export function useCalendarLogic(events: EventType[], onAddEvent: (e: EventType) => void, onEditEvent: (e: EventType) => void, onDeleteEvent: (e: EventType) => void) {
+export function useCalendarLogic(
+  events: EventType[],
+  onAddEvent: (e: EventType) => void,
+  onEditEvent: (e: EventType) => void,
+  onDeleteEvent: (e: EventType) => void,
+) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [eventTitle, setEventTitle] = useState('');
   const [editingEvent, setEditingEvent] = useState<EventType | null>(null);

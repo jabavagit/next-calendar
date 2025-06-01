@@ -10,7 +10,12 @@ interface CalendarHeaderProps {
 }
 
 const CalendarHeader: React.FC<CalendarHeaderProps> = ({
-  year, month, months, years, onMonthChange, goToToday
+  year,
+  month,
+  months,
+  years,
+  onMonthChange,
+  goToToday,
 }) => (
   <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
     <button
@@ -20,26 +25,36 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
       style={{ minWidth: 36, minHeight: 36 }}
     >
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
-        <path d="M15 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path
+          d="M15 19l-7-7 7-7"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
     </button>
     <div className="flex items-center gap-2 mx-2 flex-1 justify-center">
       <select
         className="select select-sm max-w-[120px]"
         value={month}
-        onChange={e => onMonthChange(new Date(year, Number(e.target.value), 1))}
+        onChange={(e) => onMonthChange(new Date(year, Number(e.target.value), 1))}
       >
         {months.map((m, idx) => (
-          <option key={m} value={idx}>{m}</option>
+          <option key={m} value={idx}>
+            {m}
+          </option>
         ))}
       </select>
       <select
         className="select select-sm max-w-[90px]"
         value={year}
-        onChange={e => onMonthChange(new Date(Number(e.target.value), month, 1))}
+        onChange={(e) => onMonthChange(new Date(Number(e.target.value), month, 1))}
       >
-        {years.map(y => (
-          <option key={y} value={y}>{y}</option>
+        {years.map((y) => (
+          <option key={y} value={y}>
+            {y}
+          </option>
         ))}
       </select>
       <button
@@ -58,7 +73,13 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
       style={{ minWidth: 36, minHeight: 36 }}
     >
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
-        <path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path
+          d="M9 5l7 7-7 7"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
     </button>
   </div>

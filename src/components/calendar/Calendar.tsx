@@ -28,7 +28,6 @@ const Calendar: React.FC<CalendarProps> = ({
   onAddEvent,
   onEditEvent,
   onDeleteEvent,
-
 }) => {
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
@@ -40,9 +39,12 @@ const Calendar: React.FC<CalendarProps> = ({
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   const getEventsForDate = (date: Date) =>
-    events.filter(event => event.date.toDateString() === date.toDateString());
+    events.filter((event) => event.date.toDateString() === date.toDateString());
 
-  const cells: ({ type: 'blank' } | { type: 'day', date: Date, dayNum: number, events: EventType[] })[] = [];
+  const cells: (
+    | { type: 'blank' }
+    | { type: 'day'; date: Date; dayNum: number; events: EventType[] }
+  )[] = [];
   for (let i = 0; i < startDay; i++) cells.push({ type: 'blank' });
   for (let i = 1; i <= daysInMonth; i++) {
     const date = new Date(year, month, i);
@@ -59,8 +61,18 @@ const Calendar: React.FC<CalendarProps> = ({
   const logic = useCalendarLogic(events, onAddEvent, onEditEvent, onDeleteEvent);
 
   const months = [
-    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
   ];
   const years = Array.from({ length: 11 }, (_, i) => year - 5 + i);
 
@@ -86,10 +98,7 @@ const Calendar: React.FC<CalendarProps> = ({
         onDelete={logic.handleDelete}
         shifts={shifts}
       />
-      <FloatingActionButton
-        onClick={() => logic.setShowQuickCreate(true)}
-        position={fabPosition}
-      />
+      <FloatingActionButton onClick={() => logic.setShowQuickCreate(true)} position={fabPosition} />
       <QuickCreateModal
         open={logic.showQuickCreate}
         onClose={() => logic.setShowQuickCreate(false)}
@@ -101,20 +110,30 @@ const Calendar: React.FC<CalendarProps> = ({
       />
       <EventModal
         open={!!logic.selectedDate}
-        onClose={() => { logic.setSelectedDate(null); logic.setEditingEvent(null); }}
+        onClose={() => {
+          logic.setSelectedDate(null);
+          logic.setEditingEvent(null);
+        }}
         onSave={logic.handleSaveEvent}
         eventTitle={logic.eventTitle}
         setEventTitle={logic.setEventTitle}
         editingEvent={logic.editingEvent}
         selectedDate={logic.selectedDate}
-        onDelete={logic.editingEvent ? () => { if (logic.editingEvent) logic.handleDelete(logic.editingEvent); } : undefined}
+        onDelete={
+          logic.editingEvent
+            ? () => {
+                if (logic.editingEvent) logic.handleDelete(logic.editingEvent);
+              }
+            : undefined
+        }
         shifts={[]}
         onAddShiftType={function (shift: ShiftType): void {
           throw new Error('Function not implemented.');
         }}
         setEventShiftType={function (v: string): void {
           throw new Error('Function not implemented.');
-        }} />
+        }}
+      />
     </div>
   );
 };

@@ -23,7 +23,7 @@ Thumbs.db
 .env.production.local
 
 # Editor directories and files
-.vscode
+# .vscode
 .idea
 
 # TypeScript cache
@@ -33,3 +33,4 @@ Thumbs.db
 coverage
 
 
+.husky

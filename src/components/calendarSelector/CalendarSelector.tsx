@@ -2,11 +2,7 @@ import React from 'react';
 import TooltipInput from './TooltipInput';
 import { useCalendarSelector } from '../../hooks/useCalendarSelector';
 
-interface CalendarType {
-  id: number;
-  name: string;
-  events: any[];
-}
+import type { CalendarType } from '../../types/calendarTypes';
 
 interface CalendarSelectorProps {
   calendars: CalendarType[];
@@ -33,8 +29,6 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
     showDeleteConfirm,
     setShowDeleteConfirm,
     inputTooltipRef,
-    editTooltipRef,
-    deleteTooltipRef,
     handleCreateCalendar,
     handleDeleteCalendar,
     handleRenameCalendar,
@@ -62,14 +56,26 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
                 className="input input-sm flex-1 h-9"
                 placeholder="Nuevo calendario"
                 value={newCalendarName}
-                onChange={e => setNewCalendarName(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter') handleCreateCalendar(); }}
+                onChange={(e) => setNewCalendarName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleCreateCalendar();
+                }}
                 autoFocus
                 style={{ minHeight: '36px' }}
               />
               <div className="flex gap-0">
-                <button className="btn btn-sm btn-success h-9 rounded-none rounded-l-md" onClick={handleCreateCalendar}>Crear</button>
-                <button className="btn btn-sm btn-ghost h-9 rounded-none rounded-r-md" onClick={() => setShowInput(false)}>✖</button>
+                <button
+                  className="btn btn-sm btn-success h-9 rounded-none rounded-l-md"
+                  onClick={handleCreateCalendar}
+                >
+                  Crear
+                </button>
+                <button
+                  className="btn btn-sm btn-ghost h-9 rounded-none rounded-r-md"
+                  onClick={() => setShowInput(false)}
+                >
+                  ✖
+                </button>
               </div>
             </div>
           )}
@@ -80,7 +86,7 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
 
   // Mostrar dropdown, +, editar y eliminar
   const currentId = selectedCalendarId ?? calendars[0]?.id;
-  const currentCalendar = calendars.find(c => c.id === currentId);
+  const currentCalendar = calendars.find((c) => c.id === currentId);
 
   return (
     <div className="mb-4 flex items-center gap-0">
@@ -88,10 +94,12 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
         className="select select-sm h-9 rounded-l-md rounded-r-none focus:outline-none focus:ring-primary focus:border-primary bg-accent/10 text-neutral"
         style={{ minHeight: '36px', borderRight: '0' }}
         value={currentId}
-        onChange={e => setSelectedCalendarId(Number(e.target.value))}
+        onChange={(e) => setSelectedCalendarId(Number(e.target.value))}
       >
-        {calendars.map(cal => (
-          <option key={cal.id} value={cal.id}>{cal.name}</option>
+        {calendars.map((cal) => (
+          <option key={cal.id} value={cal.id}>
+            {cal.name}
+          </option>
         ))}
       </select>
       {/* Botón + con TooltipInput */}
@@ -127,7 +135,9 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
             setEditingCalendarId(currentId);
             setEditingCalendarName(currentCalendar?.name || '');
           }}
-        >✏️</button>
+        >
+          ✏️
+        </button>
         <TooltipInput
           open={editingCalendarId === currentId}
           onClose={() => setEditingCalendarId(null)}
@@ -148,7 +158,9 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
             title="Borrar"
             style={{ minHeight: '36px' }}
             onClick={() => setShowDeleteConfirm(true)}
-          >🗑️</button>
+          >
+            🗑️
+          </button>
           <TooltipInput
             open={showDeleteConfirm}
             onClose={() => setShowDeleteConfirm(false)}

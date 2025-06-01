@@ -1,10 +1,8 @@
 import React from 'react';
 import { EventType, ShiftType } from './types';
 
-
-
 interface CalendarGridProps {
-  cells: ({ type: 'blank' } | { type: 'day', date: Date, dayNum: number, events: EventType[] })[];
+  cells: ({ type: 'blank' } | { type: 'day'; date: Date; dayNum: number; events: EventType[] })[];
   onDayClick: (date: Date) => void;
   onEditEvent: (event: EventType) => void;
   onDelete: (event: EventType) => void;
@@ -23,12 +21,15 @@ function isToday(date: Date) {
 function getInitials(title: string) {
   return title
     .split(' ')
-    .map(word => word[0]?.toUpperCase() || '')
+    .map((word) => word[0]?.toUpperCase() || '')
     .join('');
 }
 
 const CalendarGrid: React.FC<CalendarGridProps & { shifts?: ShiftType[] }> = ({
-  cells, onDayClick, onEditEvent, shifts: shifts = []
+  cells,
+  onDayClick,
+  onEditEvent,
+  shifts: shifts = [],
 }) => (
   <div className="grid grid-cols-7 gap-2">
     {cells.map((cell, idx) => {
@@ -41,10 +42,8 @@ const CalendarGrid: React.FC<CalendarGridProps & { shifts?: ShiftType[] }> = ({
       const hasEvents = events.length > 0;
 
       const event = hasEvents ? events[0] : undefined;
-      const shift = event?.shiftId
-        ? shifts.find(s => s.id === event.shiftId)
-        : undefined;
-      const eventBgColor = shift?.color ? shift.color : "";
+      const shift = event?.shiftId ? shifts.find((s) => s.id === event.shiftId) : undefined;
+      const eventBgColor = shift?.color ? shift.color : '';
 
       return (
         <div
@@ -56,15 +55,20 @@ const CalendarGrid: React.FC<CalendarGridProps & { shifts?: ShiftType[] }> = ({
           onClick={() => onDayClick(date)}
         >
           <div className="flex flex-col flex-1 w-full h-full">
-            <div className={`font-bold px-2 pt-2 text-left ${eventBgColor ? 'text-base-100' : ''} ${isToday(date) ? 'text-primary' : ''}`}
-              style={{ backgroundColor: eventBgColor ? eventBgColor : '' }}>
+            <div
+              className={`font-bold px-2 pt-2 text-left ${eventBgColor ? 'text-base-100' : ''} ${isToday(date) ? 'text-primary' : ''}`}
+              style={{ backgroundColor: eventBgColor ? eventBgColor : '' }}
+            >
               {dayNum}
             </div>
             {event ? (
               <div
                 className="flex-1 w-full flex items-center justify-center text-base-100 text-2xl font-bold rounded-b cursor-pointer"
                 style={{ backgroundColor: eventBgColor }}
-                onClick={e => { e.stopPropagation(); onEditEvent(event); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEditEvent(event);
+                }}
                 title={shift?.name || event.title}
               >
                 {getInitials(shift?.name || event.title)}

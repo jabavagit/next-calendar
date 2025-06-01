@@ -1,6 +1,11 @@
+import { CalendarType, SetCalendarsFn, SetSelectedCalendarIdFn } from '@/types/calendarTypes';
 import { useState, useRef, useEffect } from 'react';
 
-export function useCalendarSelector(calendars: any[], setCalendars: any, setSelectedCalendarId: any) {
+export function useCalendarSelector(
+  calendars: CalendarType[],
+  setCalendars: SetCalendarsFn,
+  setSelectedCalendarId: SetSelectedCalendarIdFn,
+) {
   const [newCalendarName, setNewCalendarName] = useState('');
   const [editingCalendarId, setEditingCalendarId] = useState<number | null>(null);
   const [editingCalendarName, setEditingCalendarName] = useState('');
@@ -45,15 +50,15 @@ export function useCalendarSelector(calendars: any[], setCalendars: any, setSele
 
   const handleCreateCalendar = () => {
     if (!newCalendarName.trim()) return;
-    const newId = Math.max(0, ...calendars.map((c: any) => c.id)) + 1;
-    setCalendars([...calendars, { id: newId, name: newCalendarName, events: [] }]);
+    const newId = Math.max(0, ...calendars.map((c) => c.id)) + 1;
+    setCalendars([...calendars, { id: newId, name: newCalendarName, events: [], shifts: [] }]);
     setNewCalendarName('');
     setShowInput(false);
     setSelectedCalendarId(newId);
   };
 
   const handleDeleteCalendar = (id: number) => {
-    const filtered = calendars.filter((c: any) => c.id !== id);
+    const filtered = calendars.filter((c) => c.id !== id);
     setCalendars(filtered);
     if (filtered.length) setSelectedCalendarId(filtered[0].id);
     else setSelectedCalendarId(null);
@@ -61,10 +66,8 @@ export function useCalendarSelector(calendars: any[], setCalendars: any, setSele
   };
 
   const handleRenameCalendar = (id: number) => {
-    setCalendars((cals: any[]) =>
-      cals.map(cal =>
-        cal.id === id ? { ...cal, name: editingCalendarName } : cal
-      )
+    setCalendars((cals) =>
+      cals.map((cal) => (cal.id === id ? { ...cal, name: editingCalendarName } : cal)),
     );
     setEditingCalendarId(null);
     setEditingCalendarName('');

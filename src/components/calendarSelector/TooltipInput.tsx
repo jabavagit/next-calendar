@@ -23,13 +23,11 @@ const TooltipInput: React.FC<TooltipInputProps> = ({
   onChange,
   onConfirm,
   onCancel,
-  confirmLabel = 'OK',
   cancelLabel = '✖',
   placeholder = '',
   inputType = 'text',
   autoFocus = true,
   children,
-  inputClassName,
 }) => {
   const tooltipRef = useRef<HTMLDivElement>(null);
 
@@ -57,15 +55,14 @@ const TooltipInput: React.FC<TooltipInputProps> = ({
         type={inputType}
         placeholder={placeholder}
         value={value}
-        onChange={e => onChange(e.target.value)}
-        onKeyDown={e => { if (e.key === 'Enter') onConfirm(); }}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') onConfirm();
+        }}
         autoFocus={autoFocus}
         style={{ minHeight: '36px' }}
       />
-      <button
-        className="btn btn-sm btn-accent h-9 rounded-none"
-        onClick={onConfirm}
-      >
+      <button className="btn btn-sm btn-accent h-9 rounded-none" onClick={onConfirm}>
         <span className="text-lg font-bold">+</span>
       </button>
       <button

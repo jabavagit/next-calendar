@@ -6,8 +6,11 @@
     "dev": "npm run cache:clean && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
-    "cache:clean": "rm -rf .next"
+    "lint": "eslint --config .config/eslint/eslint.config.mjs src --ext .js,.jsx,.ts,.tsx",
+    "format": "prettier --config .config/prettier/.prettierrc --ignore-path .config/prettier/.prettierignore --write .",
+    "prebuild": "npm run format && npm run lint",
+    "cache:clean": "rm -rf .next",
+    "prepare": "rm -rf .husky && cp -r .config/husky .husky"
   },
   "dependencies": {
     "autoprefixer": "^10.4.21",
@@ -22,10 +25,23 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8.33.0",
+    "@typescript-eslint/parser": "^8.33.0",
     "daisyui": "^5.0.43",
-    "eslint": "^9",
+    "eslint": "^9.28.0",
     "eslint-config-next": "15.3.3",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
+    "prettier": "^3.5.3",
     "tailwindcss": "^4.1.8",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --config .config/eslint/eslint.config.mjs --fix",
+      "prettier --config .config/prettier/.prettierrc --ignore-path .config/prettier/.prettierignore --write"
+    ]
   }
 }
