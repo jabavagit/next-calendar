@@ -2,7 +2,7 @@ import React from 'react';
 import TooltipInput from './TooltipInput';
 import { useCalendarSelector } from '../../hooks/useCalendarSelector';
 
-import type { CalendarType } from '../../types/calendarTypes';
+import type { CalendarType } from '../../interfaces/calendarTypes';
 
 interface CalendarSelectorProps {
   calendars: CalendarType[];
@@ -165,7 +165,7 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
             open={showDeleteConfirm}
             onClose={() => setShowDeleteConfirm(false)}
             value=""
-            onChange={() => {}}
+            onChange={() => { }}
             onConfirm={() => handleDeleteCalendar(currentId)}
             onCancel={() => setShowDeleteConfirm(false)}
             confirmLabel="Sí"

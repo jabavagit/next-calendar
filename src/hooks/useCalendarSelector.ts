@@ -1,5 +1,5 @@
 import { createCalendar } from '@/services/calendarApi';
-import { CalendarType, SetCalendarsFn, SetSelectedCalendarIdFn } from '@/types/calendarTypes';
+import { CalendarType, SetCalendarsFn, SetSelectedCalendarIdFn } from '@/interfaces/calendarTypes';
 import { useState, useRef, useEffect } from 'react';
 
 export function useCalendarSelector(

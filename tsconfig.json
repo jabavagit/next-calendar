@@ -15,8 +15,14 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": "src",
+    "sourceMap": true,
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["*"],
+      "@components/*": ["./src/components/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@services/*": ["./src/services/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

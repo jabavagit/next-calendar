@@ -7,7 +7,7 @@
       { "id": 2, "title": "Turno de mañana", "date": "2025-06-12", "shiftId": 1 }
     ],
     "shifts": [
-      { "id": 1, "name": "Turno Mañana", "color": "#e07a5f", "horaInicio": "08:00", "horaSalida": "15:00" }
+      { "id": 1, "name": "Turno Mañana", "color": "#e07a5f", "startHour": "08:00", "endHour": "15:00" }
     ]
   }
 ]

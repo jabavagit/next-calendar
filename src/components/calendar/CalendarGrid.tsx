@@ -1,11 +1,11 @@
+import { IEventType, IShiftType } from '@/interfaces/components/calendar.interface';
 import React from 'react';
-import { EventType, ShiftType } from './types';
 
 interface CalendarGridProps {
-  cells: ({ type: 'blank' } | { type: 'day'; date: Date; dayNum: number; events: EventType[] })[];
+  cells: ({ type: 'blank' } | { type: 'day'; date: Date; dayNum: number; events: IEventType[] })[];
   onDayClick: (date: Date) => void;
-  onEditEvent: (event: EventType) => void;
-  onDelete: (event: EventType) => void;
+  onEditEvent: (event: IEventType) => void;
+  onDelete: (event: IEventType) => void;
 }
 
 function isToday(date: Date) {
@@ -25,7 +25,7 @@ function getInitials(title: string) {
     .join('');
 }
 
-const CalendarGrid: React.FC<CalendarGridProps & { shifts?: ShiftType[] }> = ({
+const CalendarGrid: React.FC<CalendarGridProps & { shifts?: IShiftType[] }> = ({
   cells,
   onDayClick,
   onEditEvent,
@@ -41,7 +41,7 @@ const CalendarGrid: React.FC<CalendarGridProps & { shifts?: ShiftType[] }> = ({
       const isWeekend = colIdx === 5 || colIdx === 6;
       const hasEvents = events.length > 0;
 
-      const event = hasEvents ? events[0] : undefined;
+      const event: IEventType | undefined = hasEvents ? events[0] : undefined;
       const shift = event?.shiftId ? shifts.find((s) => s.id === event.shiftId) : undefined;
       const eventBgColor = shift?.color ? shift.color : '';
 

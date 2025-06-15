@@ -1,15 +1,16 @@
-import { EventType } from '@/components/calendar/types';
+
+import { IEventType } from '@/interfaces/components/calendar.interface';
 import { useState } from 'react';
 
 export function useCalendarLogic(
-  events: EventType[],
-  onAddEvent: (e: EventType) => void,
-  onEditEvent: (e: EventType) => void,
-  onDeleteEvent: (e: EventType) => void,
+  events: IEventType[],
+  onAddEvent: (e: IEventType) => void,
+  onEditEvent: (e: IEventType) => void,
+  onDeleteEvent: (e: IEventType) => void,
 ) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [eventTitle, setEventTitle] = useState('');
-  const [editingEvent, setEditingEvent] = useState<EventType | null>(null);
+  const [editingEvent, setEditingEvent] = useState<IEventType | null>(null);
 
   const [showQuickCreate, setShowQuickCreate] = useState(false);
   const [quickEventTitle, setQuickEventTitle] = useState('');
@@ -21,7 +22,7 @@ export function useCalendarLogic(
     setEditingEvent(null);
   };
 
-  const handleEditEvent = (event: EventType) => {
+  const handleEditEvent = (event: IEventType) => {
     setSelectedDate(event.date);
     setEventTitle(event.title);
     setEditingEvent(event);
@@ -39,7 +40,7 @@ export function useCalendarLogic(
     setEditingEvent(null);
   };
 
-  const handleDelete = (event: EventType) => {
+  const handleDelete = (event: IEventType) => {
     onDeleteEvent(event);
     setSelectedDate(null);
     setEventTitle('');
