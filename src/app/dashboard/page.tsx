@@ -1,11 +1,12 @@
+'use client';
 import React, { useState, useEffect } from 'react';
-import Navbar from '../layout/Navbar';
-import CalendarSelector from '../calendarSelector/CalendarSelector';
-import { getCalendars, createCalendar, updateCalendar, deleteCalendar, addShiftToCalendar } from '@/services/calendarApi';
+import { getCalendars, createCalendar, updateCalendar, deleteCalendar, addShiftToCalendar } from '@/server/services/calendarApi';
 import { ICalendarType, IEventType } from '@/interfaces/components/calendar.interface';
-import Calendar from '../calendar/Calendar';
+import Calendar from '@/components/calendar/Calendar';
+import CalendarSelector from '@/components/calendarSelector/CalendarSelector';
+import Navbar from '@/components/layout/Navbar';
 
-const Dashboard: React.FC = () => {
+const DashboardPage: React.FC = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [calendars, setCalendars] = useState<ICalendarType[]>([]);
   const [selectedCalendarId, setSelectedCalendarId] = useState<number | null>(null);
@@ -24,11 +25,31 @@ const Dashboard: React.FC = () => {
   };
 
   const handleAddEvent = (event: IEventType) => {
-    setCalendars((cals) =>
+    /*setCalendars((cals) =>
       cals.map((cal) =>
         cal.id === selectedCalendarId ? { ...cal, events: [...cal.events, event] } : cal,
       ),
-    );
+    );*/
+
+    if (!event.shift) {
+      console.error('Event shift is undefined');
+      return;
+    }
+    addShiftToCalendar(selectedCalendarId!, event.shift).then((shift) => {
+      setCalendars((cals) =>
+        cals.map((cal) =>
+          cal.id === selectedCalendarId
+            ? {
+              ...cal,
+              events: [
+                ...cal.events,
+                { ...event, shiftId: shift.id }
+              ],
+            }
+            : cal,
+        ),
+      );
+    });
   };
 
   const handleEditEvent = (event: IEventType) => {
@@ -58,7 +79,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-base-100">
+    <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-grow flex flex-col p-0 m-0 h-full min-h-0">
         <div className="flex-1 flex flex-col h-full min-h-0 px-2 sm:px-4 md:px-8 py-4 sm:py-6 md:py-10">
@@ -88,4 +109,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardPage;

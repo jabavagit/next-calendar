@@ -1,3 +1,4 @@
+import { ICalendarType } from '@/interfaces/components/calendar.interface';
 import React, { useRef, useEffect } from 'react';
 
 interface TooltipInputProps {
@@ -5,7 +6,7 @@ interface TooltipInputProps {
   onClose: () => void;
   value: string;
   onChange: (v: string) => void;
-  onConfirm: () => void;
+  onConfirm: (newCalendar: Omit<ICalendarType, "id">) => Promise<void>
   onCancel?: () => void;
   confirmLabel?: string;
   cancelLabel?: string;
@@ -47,7 +48,7 @@ const TooltipInput: React.FC<TooltipInputProps> = ({
   return (
     <div
       ref={tooltipRef}
-      className="absolute left-1/2 z-20 -translate-x-1/2 mt-2 bg-base-100 p-5 rounded shadow border border-accent flex items-center min-w-[320px]"
+      className="absolute left-1/2 z-20 -translate-x-1/2 mt-2 p-5 rounded shadow border border-accent flex items-center min-w-[320px]"
       style={{ gap: 0 }}
     >
       <input
@@ -56,15 +57,15 @@ const TooltipInput: React.FC<TooltipInputProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onKeyDown={(e) => {
+        /* onKeyDown={(e) => {
           if (e.key === 'Enter') onConfirm();
-        }}
+        }} */
         autoFocus={autoFocus}
         style={{ minHeight: '36px' }}
       />
-      <button className="btn btn-sm btn-accent h-9 rounded-none" onClick={onConfirm}>
+      {<button className="btn btn-sm btn-accent h-9 rounded-none">
         <span className="text-lg font-bold">+</span>
-      </button>
+      </button>}
       <button
         className="btn btn-sm btn-ghost h-9 rounded-none rounded-r-md"
         style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}

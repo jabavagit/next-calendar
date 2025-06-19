@@ -3,7 +3,6 @@
 @plugin "daisyui" {
   themes:
     light --default,
-    dark --prefersdark,
     silk,
     lofy --lofy,
     cupcake --cupcake,

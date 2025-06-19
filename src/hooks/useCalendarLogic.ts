@@ -1,5 +1,5 @@
-
-import { IEventType } from '@/interfaces/components/calendar.interface';
+import { EventFormValues } from '@/components/calendar/EventModal';
+import { IEventType, IShiftType } from '@/interfaces/components/calendar.interface';
 import { useState } from 'react';
 
 export function useCalendarLogic(
@@ -23,18 +23,27 @@ export function useCalendarLogic(
   };
 
   const handleEditEvent = (event: IEventType) => {
-    setSelectedDate(event.date);
+    setSelectedDate(typeof event.date === 'string' ? new Date(event.date) : event.date);
     setEventTitle(event.title);
     setEditingEvent(event);
   };
 
-  const handleSaveEvent = () => {
-    if (!eventTitle.trim() || !selectedDate) return;
-    if (editingEvent) {
-      onEditEvent({ ...editingEvent, title: eventTitle, date: selectedDate });
-    } else {
-      onAddEvent({ id: Date.now(), title: eventTitle, date: selectedDate });
-    }
+  const handleSaveEvent = ({ id, date, title, shift }: EventFormValues) => {
+    if (!title.trim() || !date || !shift) return;
+
+    const eventToSave: IEventType = {
+      id: id ?? Date.now(),
+      title,
+      date,
+      shift,
+    };
+
+    if (shift.isNew) {
+      onAddEvent(eventToSave);
+    } else if (editingEvent) {
+      onEditEvent(eventToSave);
+    } 
+
     setSelectedDate(null);
     setEventTitle('');
     setEditingEvent(null);
@@ -53,6 +62,7 @@ export function useCalendarLogic(
       id: Date.now(),
       title: quickEventTitle,
       date: new Date(quickEventDate),
+      shift: undefined, // O puedes pedir un shift por defecto si lo necesitas
     });
     setShowQuickCreate(false);
     setQuickEventTitle('');

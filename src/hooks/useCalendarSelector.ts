@@ -1,11 +1,17 @@
-import { createCalendar } from '@/services/calendarApi';
-import { CalendarType, SetCalendarsFn, SetSelectedCalendarIdFn } from '@/interfaces/calendarTypes';
+import { createCalendar } from '@/server/services/calendarApi';
 import { useState, useRef, useEffect } from 'react';
+import { ICalendarType } from '@/interfaces/components/calendar.interface';
+
+// Add the type definition for ISetSelectedCalendarIdFn if not already imported
+type ISetSelectedCalendarIdFn = (id: number | null) => void;
+
+// Add the type definition for ISetCalendarsFn
+type ISetCalendarsFn = React.Dispatch<React.SetStateAction<ICalendarType[]>>;
 
 export function useCalendarSelector(
-  calendars: CalendarType[],
-  setCalendars: SetCalendarsFn,
-  setSelectedCalendarId: SetSelectedCalendarIdFn,
+  calendars: ICalendarType[],
+  setCalendars: ISetCalendarsFn,
+  setSelectedCalendarId: ISetSelectedCalendarIdFn,
 ) {
   const [newCalendarName, setNewCalendarName] = useState('');
   const [editingCalendarId, setEditingCalendarId] = useState<number | null>(null);
@@ -49,11 +55,31 @@ export function useCalendarSelector(
     };
   }, [showInput, editingCalendarId, showDeleteConfirm]);
 
-  const handleCreateCalendar = async (newCalendar: Omit<CalendarType, 'id'>) => {
+  const handleCreateCalendar = async (newCalendar: Omit<ICalendarType, 'id'>) => {
     try {
-      const created = await createCalendar(newCalendar);
-      setCalendars((prev) => [...prev, created]);
-      setSelectedCalendarId(created.id);
+      // Ensure shifts is always an array to match ISCalendarType
+      const calendarToCreate = {
+        ...newCalendar,
+        shifts: newCalendar.shifts ?? [],
+      };
+      const created = await createCalendar(calendarToCreate as Omit<any, 'id'>);
+      // Map 'created' to ICalendarType to ensure type compatibility
+      const mappedCreated: ICalendarType = {
+        ...created,
+        shifts: (created.shifts ?? []).map((shift: any) => ({
+          ...shift,
+          id: shift.id ?? 0, // fallback if id is undefined
+        })),
+        events: (created.events ?? []).map((event: any) => ({
+          ...event,
+          shift: event.shift && {
+            ...event.shift,
+            id: event.shift.id ?? 0, // fallback if id is undefined
+          },
+        })),
+      };
+      setCalendars((prev) => [...prev, mappedCreated]);
+      setSelectedCalendarId(mappedCreated.id);
     } catch (error) {
       // Maneja el error (puedes mostrar un toast, etc)
       console.error('Error al crear calendario', error);

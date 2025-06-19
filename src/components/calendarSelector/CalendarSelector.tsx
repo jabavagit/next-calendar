@@ -1,14 +1,13 @@
+import { useCalendarSelector } from '@/hooks/useCalendarSelector';
+import { ICalendarType } from '@/interfaces/components/calendar.interface';
 import React from 'react';
 import TooltipInput from './TooltipInput';
-import { useCalendarSelector } from '../../hooks/useCalendarSelector';
-
-import type { CalendarType } from '../../interfaces/calendarTypes';
 
 interface CalendarSelectorProps {
-  calendars: CalendarType[];
+  calendars: ICalendarType[];
   selectedCalendarId: number | null;
   setSelectedCalendarId: (id: number | null) => void;
-  setCalendars: React.Dispatch<React.SetStateAction<CalendarType[]>>;
+  setCalendars: React.Dispatch<React.SetStateAction<ICalendarType[]>>;
 }
 
 const CalendarSelector: React.FC<CalendarSelectorProps> = ({
@@ -50,23 +49,22 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
           {showInput && (
             <div
               ref={inputTooltipRef}
-              className="absolute left-1/2 z-20 -translate-x-1/2 mt-2 bg-base-100 p-5 rounded shadow border flex gap-3 items-center min-w-[320px]"
+              className="absolute left-1/2 z-20 -translate-x-1/2 mt-2 p-5 rounded shadow border flex gap-3 items-center min-w-[320px]"
             >
               <input
                 className="input input-sm flex-1 h-9"
                 placeholder="Nuevo calendario"
                 value={newCalendarName}
                 onChange={(e) => setNewCalendarName(e.target.value)}
-                onKeyDown={(e) => {
+                /* onKeyDown={(e) => {
                   if (e.key === 'Enter') handleCreateCalendar();
-                }}
+                }} */
                 autoFocus
                 style={{ minHeight: '36px' }}
               />
               <div className="flex gap-0">
                 <button
                   className="btn btn-sm btn-success h-9 rounded-none rounded-l-md"
-                  onClick={handleCreateCalendar}
                 >
                   Crear
                 </button>
@@ -143,7 +141,7 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
           onClose={() => setEditingCalendarId(null)}
           value={editingCalendarName}
           onChange={setEditingCalendarName}
-          onConfirm={() => handleRenameCalendar(currentId)}
+          onConfirm={async () => handleRenameCalendar(currentId)}
           onCancel={() => setEditingCalendarId(null)}
           confirmLabel="✔"
           cancelLabel="✖"
@@ -166,7 +164,7 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
             onClose={() => setShowDeleteConfirm(false)}
             value=""
             onChange={() => { }}
-            onConfirm={() => handleDeleteCalendar(currentId)}
+            onConfirm={async () => handleDeleteCalendar(currentId)}
             onCancel={() => setShowDeleteConfirm(false)}
             confirmLabel="Sí"
             cancelLabel="No"

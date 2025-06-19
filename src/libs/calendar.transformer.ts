@@ -1,7 +1,7 @@
 import { ISCalendarType } from "@/interfaces/calendarTypes";
 import { ICalendarType } from "@/interfaces/components/calendar.interface";
 
-export const getCalendarsTransformer = (data: ISCalendarType): ICalendarType[] => {
+export const getCalendarsTransformer = (data: ISCalendarType[]): ICalendarType[] => {
   return data.map((calendar) => ({
     id: calendar.id,
     name: calendar.name,
@@ -9,22 +9,13 @@ export const getCalendarsTransformer = (data: ISCalendarType): ICalendarType[] =
       id: event.id,
       date: new Date(event.date),
       title: event.title,
-      shiftId: event.shiftId,
+      shiftId: event.id,
     })),
-    shifts: calendar.shifts?.map((shift) => ({
-      id: shift.id,
-      name: shift.name,
-      color: shift.color,
-      startHour: shift.startHour,
-      endHour: shift.endHour,
-      isEdit: false,
-      isDelete: false,
-      isNew: false,
-    })),
+    shifts: calendar.shifts || [],
   }));
 };
 
-export const setCalendarsTransformer = (data: ICalendarType): ISCalendarType[] => {
+/* export const setCalendarsTransformer = (data: ICalendarType): ISCalendarType[] => {
   return data.map((calendar) => ({
     id: calendar.id,
     name: calendar.name,
@@ -42,4 +33,4 @@ export const setCalendarsTransformer = (data: ICalendarType): ISCalendarType[] =
       endHour: shift.endHour,
     })) || [],
   }));
-};
+}; */

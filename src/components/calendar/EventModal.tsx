@@ -2,10 +2,17 @@ import React, { useState, useEffect } from 'react';
 import type { IShiftType } from '@/interfaces/components/calendar.interface';
 import { useShiftState } from '@/hooks/useShiftState';
 
+export interface EventFormValues {
+  id: number;
+  date: Date;
+  title: string;
+  shift: IShiftType;
+}
+
 interface EventModalProps {
   open: boolean;
   onClose: () => void;
-  onSave: (args: any) => void;
+  onSave: (event: EventFormValues) => void;
   eventTitle: string;
   setEventTitle: (v: string) => void;
   editingEvent: any;
@@ -34,7 +41,7 @@ const EventModal: React.FC<EventModalProps> = ({
   const handleSave = () => {
     let shiftToSave: IShiftType;
     if (shift === 'new') {
-      shiftToSave = { ...newShift, id: Date.now() };
+      shiftToSave = { ...newShift, id: Date.now(), isNew: true };
     } else {
       shiftToSave = shift as IShiftType;
     }

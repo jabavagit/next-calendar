@@ -1,5 +1,5 @@
 export interface IShiftType {
-  id: number;
+  id?: number;
   name: string;
   color: string;
   startHour: string;
@@ -14,6 +14,7 @@ export interface IEventType {
   date: Date;
   title: string;
   shiftId?: number;
+  shift?: IShiftType;
 }
 
 export interface ICalendarType {
