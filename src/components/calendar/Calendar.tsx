@@ -6,17 +6,17 @@ import EventModal from './EventModal';
 import QuickCreateModal from './QuickCreateModal';
 import FloatingActionButton from './FloatingActionButton';
 import { useCalendarLogic } from '../../hooks/useCalendarLogic';
-import { IEventType, IShiftType } from '@/interfaces/components/calendar.interface';
+import { IEventExtended, IShiftExtended } from '@/interfaces/calendar.interface';
 
 interface CalendarProps {
   currentMonth: Date;
-  events: IEventType[];
+  events: IEventExtended[];
   fabPosition?: 'left' | 'right';
-  shifts?: IShiftType[];
+  shifts?: IShiftExtended[];
   onMonthChange: (newMonth: Date) => void;
-  onAddEvent: (event: IEventType) => void;
-  onEditEvent: (event: IEventType) => void;
-  onDeleteEvent: (event: IEventType) => void;
+  onAddEvent: (event: IEventExtended) => void;
+  onEditEvent: (event: IEventExtended) => void;
+  onDeleteEvent: (event: IEventExtended) => void;
 }
 
 const Calendar: React.FC<CalendarProps> = ({
@@ -38,37 +38,30 @@ const Calendar: React.FC<CalendarProps> = ({
   startDay = startDay === 0 ? 6 : startDay - 1;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  const getEventsForDate = (date: Date) =>
-    events.filter((event) => {
-      // Siempre convierte ambos a "YYYY-MM-DD" en local
-      const cellDateStr = [
-        date.getFullYear(),
-        String(date.getMonth() + 1).padStart(2, '0'),
-        String(date.getDate()).padStart(2, '0'),
-      ].join('-');
-      const eventDateStr =
-        typeof event.date === 'string'
-          ? event.date
-          : [
-            event.date.getFullYear(),
-            String(event.date.getMonth() + 1).padStart(2, '0'),
-            String(event.date.getDate()).padStart(2, '0'),
-          ].join('-');
+  const getEventsForDate = (date: Date): IEventExtended[] => {
+    const cellDateStr = toISODateString(date);
+    return events.filter((event) => {
+      const eventDateStr = event.dateObject
+        ? toISODateString(event.dateObject)
+        : toISODateString(event.date);
       return eventDateStr === cellDateStr;
     });
+  }
+
 
   const cells: (
     | { type: 'blank' }
-    | { type: 'day'; date: Date; dayNum: number; events: IEventType[] }
+    | { type: 'day'; date: Date; dayNum: number; events: IEventExtended[] }
   )[] = [];
   for (let i = 0; i < startDay; i++) cells.push({ type: 'blank' });
   for (let i = 1; i <= daysInMonth; i++) {
     const date = new Date(year, month, i);
+    const eventsForDate = getEventsForDate(date);
     cells.push({
       type: 'day',
       date,
       dayNum: i,
-      events: getEventsForDate(date),
+      events: eventsForDate,
     });
   }
   while (cells.length % 7 !== 0) cells.push({ type: 'blank' });
@@ -142,3 +135,12 @@ const Calendar: React.FC<CalendarProps> = ({
 };
 
 export default Calendar;
+
+function toISODateString(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return [
+    d.getFullYear(),
+    String(d.getMonth() + 1).padStart(2, '0'),
+    String(d.getDate()).padStart(2, '0'),
+  ].join('-');
+}

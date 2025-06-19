@@ -2,12 +2,19 @@
   {
     "id": 1,
     "name": "Laboral",
-    "events": [
-      { "id": 1, "title": "Turno de mañana", "date": "2025-06-11", "shiftId": 1 },
-      { "id": 2, "title": "Turno de mañana", "date": "2025-06-12", "shiftId": 1 }
-    ],
-    "shifts": [
-      { "id": 1, "name": "Turno Mañana", "color": "#e07a5f", "startHour": "08:00", "endHour": "15:00" }
-    ]
+    "description": "Calendario laboral",
+    "type": "shift",
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z",
+    "active": true
+  },
+  {
+    "id": 2,
+    "name": "Vacaciones",
+    "description": "Calendario de vacaciones",
+    "type": "holiday",
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z",
+    "active": true
   }
 ]

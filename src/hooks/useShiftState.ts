@@ -1,13 +1,15 @@
-import { IShiftType } from "@/interfaces/components/calendar.interface";
+import { IShiftExtended } from "@/interfaces/calendar.interface";
 import { useState, useEffect } from "react";
 
 
-const defaultShift: IShiftType = {
+const defaultShift: IShiftExtended = {
   id: Date.now(),
-  name: '',
-  color: '#e07a5f',
-  startHour: '',
-  endHour: '',
+  eventId: 0,
+  name: "",
+  color: "",
+  startHour: "",
+  endHour: "",
+  createdAt: ""
 };
 
 function toLocalDateString(date: Date): string {
@@ -17,15 +19,17 @@ function toLocalDateString(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
-export function useShiftState(editingEvent: any, selectedDate: Date | null, shifts: IShiftType[]) {
+export function useShiftState(editingEvent: any, selectedDate: Date | null, shifts: IShiftExtended[]) {
   const [date, setDate] = useState(selectedDate ? toLocalDateString(selectedDate) : '');
-  const [shift, setShift] = useState<IShiftType | 'new' | ''>(defaultShift);
-  const [newShift, setNewShift] = useState<IShiftType>({
+  const [shift, setShift] = useState<IShiftExtended | 'new' | ''>(defaultShift);
+  const [newShift, setNewShift] = useState<IShiftExtended>({
     id: Date.now(),
     name: '',
     color: '#e07a5f',
     startHour: '',
     endHour: '',
+    eventId: 0,
+    createdAt: new Date().toISOString(),
   });
 
   useEffect(() => {
@@ -47,7 +51,7 @@ export function useShiftState(editingEvent: any, selectedDate: Date | null, shif
     }
   };
 
-  const handleNewShiftChange = (field: keyof IShiftType, value: string) => {
+  const handleNewShiftChange = (field: keyof IShiftExtended, value: string) => {
     setNewShift(prev => ({ ...prev, [field]: value }));
   };
 

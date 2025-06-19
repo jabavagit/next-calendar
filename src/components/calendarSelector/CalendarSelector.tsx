@@ -1,13 +1,13 @@
 import { useCalendarSelector } from '@/hooks/useCalendarSelector';
-import { ICalendarType } from '@/interfaces/components/calendar.interface';
+import { ICalendarExtended } from '@/interfaces/calendar.interface';
 import React from 'react';
 import TooltipInput from './TooltipInput';
 
 interface CalendarSelectorProps {
-  calendars: ICalendarType[];
+  calendars: ICalendarExtended[];
   selectedCalendarId: number | null;
   setSelectedCalendarId: (id: number | null) => void;
-  setCalendars: React.Dispatch<React.SetStateAction<ICalendarType[]>>;
+  setCalendars: React.Dispatch<React.SetStateAction<ICalendarExtended[]>>;
 }
 
 const CalendarSelector: React.FC<CalendarSelectorProps> = ({

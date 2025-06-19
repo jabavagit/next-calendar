@@ -1,21 +1,7 @@
-import { ISCalendarType } from "@/interfaces/calendarTypes";
-import { ICalendarType } from "@/interfaces/components/calendar.interface";
+import { ICalendar, ICalendarExtended } from "@/interfaces/calendar.interface";
 
-export const getCalendarsTransformer = (data: ISCalendarType[]): ICalendarType[] => {
-  return data.map((calendar) => ({
-    id: calendar.id,
-    name: calendar.name,
-    events: calendar.events.map((event) => ({
-      id: event.id,
-      date: new Date(event.date),
-      title: event.title,
-      shiftId: event.id,
-    })),
-    shifts: calendar.shifts || [],
-  }));
-};
 
-/* export const setCalendarsTransformer = (data: ICalendarType): ISCalendarType[] => {
+/* export const setCalendarsTransformer = (data: ICalendarExtended): ICalendarExtended[] => {
   return data.map((calendar) => ({
     id: calendar.id,
     name: calendar.name,

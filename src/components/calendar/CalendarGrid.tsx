@@ -1,11 +1,19 @@
-import { IEventType, IShiftType } from '@/interfaces/components/calendar.interface';
+import { IEventExtended, IShiftExtended } from '@/interfaces/calendar.interface';
 import React from 'react';
 
 interface CalendarGridProps {
-  cells: ({ type: 'blank' } | { type: 'day'; date: Date; dayNum: number; events: IEventType[] })[];
+  cells: ({ type: 'blank' } | { type: 'day'; date: Date; dayNum: number; events: IEventExtended[] })[];
   onDayClick: (date: Date) => void;
-  onEditEvent: (event: IEventType) => void;
-  onDelete: (event: IEventType) => void;
+  onEditEvent: (event: IEventExtended) => void;
+  onDelete: (event: IEventExtended) => void;
+}
+
+interface propsHandlerClick {
+  e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  event?: IEventExtended,
+  date?: string,
+  onDayClick: (date: Date) => void,
+  onEditEvent: (event: IEventExtended) => void;
 }
 
 function isToday(date: Date) {
@@ -25,7 +33,22 @@ function getInitials(title: string) {
     .join('');
 }
 
-const CalendarGrid: React.FC<CalendarGridProps & { shifts?: IShiftType[] }> = ({
+function handlerClick(
+  e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  event: IEventExtended | undefined,
+  date: Date,
+  onDayClick: (date: Date) => void,
+  onEditEvent: (event: IEventExtended) => void
+) {
+  if (!event) {
+    onDayClick(date);
+    return;
+  }
+  e.stopPropagation();
+  onEditEvent(event);
+}
+
+const CalendarGrid: React.FC<CalendarGridProps & { shifts?: IShiftExtended[] }> = ({
   cells,
   onDayClick,
   onEditEvent,
@@ -41,9 +64,12 @@ const CalendarGrid: React.FC<CalendarGridProps & { shifts?: IShiftType[] }> = ({
       const isWeekend = colIdx === 5 || colIdx === 6;
       const hasEvents = events.length > 0;
 
-      const event: IEventType | undefined = hasEvents ? events[0] : undefined;
-      const shift = event?.shiftId ? shifts.find((s) => s.id === event.shiftId) : undefined;
-      const eventBgColor = shift?.color ? shift.color : '';
+      const event: IEventExtended | undefined = hasEvents ? events[0] : undefined;
+      const eventShifts =
+        event?.shiftsId && Array.isArray(event.shiftsId)
+          ? shifts.filter((s) => event.shiftsId!.includes(s.id))
+          : [];
+      const eventBgColor = eventShifts[0]?.color || '';
 
       return (
         <div
@@ -52,7 +78,7 @@ const CalendarGrid: React.FC<CalendarGridProps & { shifts?: IShiftType[] }> = ({
             ${isToday(date) ? 'border-2 border-primary bg-primary/10' : ''}
             ${isWeekend ? 'bg-warning/10' : 'bg-base-100'}
             hover:bg-base-200 shadow-sm cursor-pointer`}
-          onClick={() => onDayClick(date)}
+          onClick={(e) => handlerClick(e, event, date, onDayClick, onEditEvent)}
         >
           <div className="flex flex-col flex-1 w-full h-full">
             <div
@@ -63,15 +89,13 @@ const CalendarGrid: React.FC<CalendarGridProps & { shifts?: IShiftType[] }> = ({
             </div>
             {event ? (
               <div
-                className="flex-1 w-full flex items-center justify-center text-base-100 text-2xl font-bold rounded-b cursor-pointer"
+                className="flex-1 w-full flex items-center justify-center text-base-100 text-2xl font-bold rounded-b cursor-pointer border-2 border-base-100 hover:border-primary transition-colors"
                 style={{ backgroundColor: eventBgColor }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEditEvent(event);
-                }}
-                title={shift?.name || event.title}
+                title={eventShifts.map(s => s.name).join(', ') || event.title}
               >
-                {getInitials(shift?.name || event.title)}
+                {eventShifts.length > 0
+                  ? eventShifts.map(s => getInitials(s.name)).join(' ')
+                  : getInitials(event.title)}
               </div>
             ) : (
               <div className="flex-1" />

@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Turno Mañana",
+    "color": "#e07a5f",
+    "startHour": "08:00",
+    "endHour": "15:00"
+  },
+  {
+    "id": 2,
+    "name": "Turno Tarde",
+    "color": "#81b29a",
+    "startHour": "15:00",
+    "endHour": "22:00"
+  },
+  {
+    "id": 3,
+    "name": "Turno Noche",
+    "color": "#f2cc8f",
+    "startHour": "22:00",
+    "endHour": "08:00"
+  }
+]

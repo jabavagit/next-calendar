@@ -1,15 +1,15 @@
 import { createCalendar } from '@/server/services/calendarApi';
 import { useState, useRef, useEffect } from 'react';
-import { ICalendarType } from '@/interfaces/components/calendar.interface';
+import { ICalendarExtended } from '@/interfaces/calendar.interface';
 
 // Add the type definition for ISetSelectedCalendarIdFn if not already imported
 type ISetSelectedCalendarIdFn = (id: number | null) => void;
 
 // Add the type definition for ISetCalendarsFn
-type ISetCalendarsFn = React.Dispatch<React.SetStateAction<ICalendarType[]>>;
+type ISetCalendarsFn = React.Dispatch<React.SetStateAction<ICalendarExtended[]>>;
 
 export function useCalendarSelector(
-  calendars: ICalendarType[],
+  calendars: ICalendarExtended[],
   setCalendars: ISetCalendarsFn,
   setSelectedCalendarId: ISetSelectedCalendarIdFn,
 ) {
@@ -55,16 +55,16 @@ export function useCalendarSelector(
     };
   }, [showInput, editingCalendarId, showDeleteConfirm]);
 
-  const handleCreateCalendar = async (newCalendar: Omit<ICalendarType, 'id'>) => {
+  const handleCreateCalendar = async (newCalendar: Omit<ICalendarExtended, 'id'>) => {
     try {
-      // Ensure shifts is always an array to match ISCalendarType
+      // Ensure shifts is always an array to match ICalendarExtended
       const calendarToCreate = {
         ...newCalendar,
         shifts: newCalendar.shifts ?? [],
       };
       const created = await createCalendar(calendarToCreate as Omit<any, 'id'>);
-      // Map 'created' to ICalendarType to ensure type compatibility
-      const mappedCreated: ICalendarType = {
+      // Map 'created' to ICalendarExtended to ensure type compatibility
+      const mappedCreated: ICalendarExtended = {
         ...created,
         shifts: (created.shifts ?? []).map((shift: any) => ({
           ...shift,

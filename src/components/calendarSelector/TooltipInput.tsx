@@ -1,4 +1,4 @@
-import { ICalendarType } from '@/interfaces/components/calendar.interface';
+import { ICalendarExtended } from '@/interfaces/calendar.interface';
 import React, { useRef, useEffect } from 'react';
 
 interface TooltipInputProps {
@@ -6,7 +6,7 @@ interface TooltipInputProps {
   onClose: () => void;
   value: string;
   onChange: (v: string) => void;
-  onConfirm: (newCalendar: Omit<ICalendarType, "id">) => Promise<void>
+  onConfirm: (newCalendar: Omit<ICalendarExtended, "id">) => Promise<void>
   onCancel?: () => void;
   confirmLabel?: string;
   cancelLabel?: string;

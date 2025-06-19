@@ -1,16 +1,16 @@
 import { EventFormValues } from '@/components/calendar/EventModal';
-import { IEventType, IShiftType } from '@/interfaces/components/calendar.interface';
+import { IEventExtended, IShiftExtended } from '@/interfaces/calendar.interface';
 import { useState } from 'react';
 
 export function useCalendarLogic(
-  events: IEventType[],
-  onAddEvent: (e: IEventType) => void,
-  onEditEvent: (e: IEventType) => void,
-  onDeleteEvent: (e: IEventType) => void,
+  events: IEventExtended[],
+  onAddEvent: (e: IEventExtended) => void,
+  onEditEvent: (e: IEventExtended) => void,
+  onDeleteEvent: (e: IEventExtended) => void,
 ) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [eventTitle, setEventTitle] = useState('');
-  const [editingEvent, setEditingEvent] = useState<IEventType | null>(null);
+  const [editingEvent, setEditingEvent] = useState<IEventExtended | null>(null);
 
   const [showQuickCreate, setShowQuickCreate] = useState(false);
   const [quickEventTitle, setQuickEventTitle] = useState('');
@@ -22,8 +22,8 @@ export function useCalendarLogic(
     setEditingEvent(null);
   };
 
-  const handleEditEvent = (event: IEventType) => {
-    setSelectedDate(typeof event.date === 'string' ? new Date(event.date) : event.date);
+  const handleEditEvent = (event: IEventExtended) => {
+    setSelectedDate(event.dateObject ? event.dateObject : new Date(event.date));
     setEventTitle(event.title);
     setEditingEvent(event);
   };
@@ -31,11 +31,12 @@ export function useCalendarLogic(
   const handleSaveEvent = ({ id, date, title, shift }: EventFormValues) => {
     if (!title.trim() || !date || !shift) return;
 
-    const eventToSave: IEventType = {
+    const eventToSave: IEventExtended = {
       id: id ?? Date.now(),
       title,
-      date,
-      shift,
+      dateObject: new Date(date),
+      calendarId: 0,
+      date: new Date(date).toISOString()
     };
 
     if (shift.isNew) {
@@ -49,7 +50,7 @@ export function useCalendarLogic(
     setEditingEvent(null);
   };
 
-  const handleDelete = (event: IEventType) => {
+  const handleDelete = (event: IEventExtended) => {
     onDeleteEvent(event);
     setSelectedDate(null);
     setEventTitle('');
@@ -61,8 +62,8 @@ export function useCalendarLogic(
     onAddEvent({
       id: Date.now(),
       title: quickEventTitle,
-      date: new Date(quickEventDate),
-      shift: undefined, // O puedes pedir un shift por defecto si lo necesitas
+      date: new Date(quickEventDate).toISOString(),
+      calendarId: 0
     });
     setShowQuickCreate(false);
     setQuickEventTitle('');

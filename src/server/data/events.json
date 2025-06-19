@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "calendarId": 1,
+    "title": "Turno Mañana",
+    "date": "2025-06-20",
+    "shiftsId": [
+      1
+    ]
+  },
+  {
+    "id": 2,
+    "calendarId": 1,
+    "title": "Turno Tarde",
+    "date": "2025-06-21",
+    "shiftsId": [
+      2
+    ]
+  }
+]
