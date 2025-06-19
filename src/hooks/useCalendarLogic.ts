@@ -4,8 +4,7 @@ import { useState } from 'react';
 
 export function useCalendarLogic(
   events: IEventExtended[],
-  onAddEvent: (e: IEventExtended) => void,
-  onEditEvent: (e: IEventExtended) => void,
+  onSaveEvent: (e: IEventExtended) => void,
   onDeleteEvent: (e: IEventExtended) => void,
 ) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -21,30 +20,25 @@ export function useCalendarLogic(
     setEventTitle('');
     setEditingEvent(null);
   };
+  
+  const handleSaveEvent = (form: EventFormValues) => {
+    if (!form.title.trim() || !form.date || !form.shift) return;
 
-  const handleEditEvent = (event: IEventExtended) => {
-    setSelectedDate(event.dateObject ? event.dateObject : new Date(event.date));
-    setEventTitle(event.title);
-    setEditingEvent(event);
-  };
-
-  const handleSaveEvent = ({ id, date, title, shift }: EventFormValues) => {
-    if (!title.trim() || !date || !shift) return;
-
+    // Si hay un evento en edición, actualiza sus campos
+    const isEdit = !!editingEvent;
     const eventToSave: IEventExtended = {
-      id: id ?? Date.now(),
-      title,
-      dateObject: new Date(date),
-      calendarId: 0,
-      date: new Date(date).toISOString()
+      id: isEdit ? editingEvent!.id : form.id ?? Date.now(),
+      title: form.title,
+      dateObject: new Date(form.date),
+      calendarId: editingEvent?.calendarId ?? 0,
+      date: new Date(form.date).toISOString(),
+      shift: form.shift.isNew ? form.shift : form.shift,
+      createdAt: isEdit ? editingEvent!.createdAt : new Date().toISOString(),
+      isEdit: isEdit,
+      isNew: !isEdit,
     };
 
-    if (shift.isNew) {
-      onAddEvent(eventToSave);
-    } else if (editingEvent) {
-      onEditEvent(eventToSave);
-    } 
-
+    onSaveEvent(eventToSave);
     setSelectedDate(null);
     setEventTitle('');
     setEditingEvent(null);
@@ -59,15 +53,22 @@ export function useCalendarLogic(
 
   const handleQuickCreate = () => {
     if (!quickEventTitle.trim() || !quickEventDate) return;
-    onAddEvent({
+    onSaveEvent({
       id: Date.now(),
       title: quickEventTitle,
       date: new Date(quickEventDate).toISOString(),
       calendarId: 0
-    });
+    } as IEventExtended);
     setShowQuickCreate(false);
     setQuickEventTitle('');
     setQuickEventDate('');
+  };
+
+  // handleEditEvent solo prepara el formulario, no guarda
+  const handleEditEvent = (event: IEventExtended) => {
+    setSelectedDate(event.dateObject ? event.dateObject : new Date(event.date));
+    setEventTitle(event.title);
+    setEditingEvent(event);
   };
 
   return {

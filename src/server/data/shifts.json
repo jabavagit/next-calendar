@@ -19,5 +19,23 @@
     "color": "#f2cc8f",
     "startHour": "22:00",
     "endHour": "08:00"
+  },
+  {
+    "id": 1750358637797,
+    "eventId": 1,
+    "name": "turno nuevo",
+    "color": "#000000",
+    "startHour": "20:43",
+    "endHour": "02:49",
+    "createdAt": "2025-06-19T18:43:57.797Z"
+  },
+  {
+    "id": 1750359805353,
+    "eventId": 2,
+    "name": "ttt ggg",
+    "color": "#91cb25",
+    "startHour": "23:05",
+    "endHour": "22:04",
+    "createdAt": "2025-06-19T19:03:25.353Z"
   }
 ]

@@ -1,65 +1,47 @@
-import { IShiftExtended } from "@/interfaces/calendar.interface";
+import { IEventExtended, IShiftExtended } from "@/interfaces/calendar.interface";
 import { useState, useEffect } from "react";
 
 
-const defaultShift: IShiftExtended = {
-  id: Date.now(),
-  eventId: 0,
-  name: "",
-  color: "",
-  startHour: "",
-  endHour: "",
-  createdAt: ""
-};
-
-function toLocalDateString(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-export function useShiftState(editingEvent: any, selectedDate: Date | null, shifts: IShiftExtended[]) {
-  const [date, setDate] = useState(selectedDate ? toLocalDateString(selectedDate) : '');
-  const [shift, setShift] = useState<IShiftExtended | 'new' | ''>(defaultShift);
+export function useShiftState(editingEvent: IEventExtended | null, selectedDate: Date | null, shifts: IShiftExtended[]) {
+  const [date, setDate] = useState(selectedDate ? selectedDate.toISOString().slice(0, 10) : '');
+  const [shift, setShift] = useState<IShiftExtended | string>('');
   const [newShift, setNewShift] = useState<IShiftExtended>({
-    id: Date.now(),
+    id: 0,
+    eventId: 0,
     name: '',
-    color: '#e07a5f',
+    color: '#000000',
     startHour: '',
     endHour: '',
-    eventId: 0,
-    createdAt: new Date().toISOString(),
   });
 
   useEffect(() => {
-    if (selectedDate) setDate(toLocalDateString(selectedDate));
-    if (editingEvent?.shiftId) {
-      const found = shifts.find(s => s.id === editingEvent.shiftId);
-      setShift(found ?? defaultShift);
-    } else {
-      setShift(defaultShift);
+    if (editingEvent) {
+      setDate(editingEvent.date ? editingEvent.date.slice(0, 10) : '');
+      // Busca el shift por id en la lista de shifts usando shiftsId (array de id)
+      if (editingEvent.shiftsId && editingEvent.shiftsId.length > 0) {
+        // Si hay varios, selecciona el primero (ajusta según tu lógica)
+        const found = shifts.find(s => editingEvent.shiftsId!.includes(s.id));
+        setShift(found || '');
+      } else {
+        setShift('');
+      }
+    } else if (selectedDate) {
+      setDate(selectedDate.toISOString().slice(0, 10));
+      setShift('');
     }
-  }, [selectedDate, editingEvent, shifts]);
-
-  const handleShiftSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === 'new') setShift('new');
-    else if (e.target.value === '') setShift(defaultShift);
-    else {
-      const found = shifts.find(s => s.id === Number(e.target.value));
-      if (found) setShift(found);
-    }
-  };
-
-  const handleNewShiftChange = (field: keyof IShiftExtended, value: string) => {
-    setNewShift(prev => ({ ...prev, [field]: value }));
-  };
+  }, [editingEvent, selectedDate, shifts]);
 
   return {
     date, setDate,
     shift, setShift,
     newShift, setNewShift,
-    handleShiftSelect,
-    handleNewShiftChange,
+    handleShiftSelect: (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const value = e.target.value;
+      if (value === 'new') setShift('new');
+      else setShift(shifts.find(s => s.id === Number(value)) || '');
+    },
+    handleNewShiftChange: (field: keyof IShiftExtended, value: string) => {
+      setNewShift(prev => ({ ...prev, [field]: value }));
+    },
   };
 }

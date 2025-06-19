@@ -10,11 +10,21 @@
   },
   {
     "id": 2,
-    "calendarId": 1,
     "title": "Turno Tarde",
-    "date": "2025-06-21",
+    "calendarId": 1,
+    "date": "2025-06-21T00:00:00.000Z",
+    "shift": {
+      "id": 1750359805333,
+      "eventId": 0,
+      "name": "ttt ggg",
+      "color": "#91cb25",
+      "startHour": "23:05",
+      "endHour": "22:04",
+      "isNew": true
+    },
     "shiftsId": [
-      2
-    ]
+      1750359805353
+    ],
+    "updatedAt": "2025-06-19T19:03:25.604Z"
   }
 ]

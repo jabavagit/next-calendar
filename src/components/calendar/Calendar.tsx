@@ -14,8 +14,7 @@ interface CalendarProps {
   fabPosition?: 'left' | 'right';
   shifts?: IShiftExtended[];
   onMonthChange: (newMonth: Date) => void;
-  onAddEvent: (event: IEventExtended) => void;
-  onEditEvent: (event: IEventExtended) => void;
+  onSaveEvent: (event: IEventExtended) => void;
   onDeleteEvent: (event: IEventExtended) => void;
 }
 
@@ -25,8 +24,7 @@ const Calendar: React.FC<CalendarProps> = ({
   fabPosition = 'right',
   shifts = [],
   onMonthChange,
-  onAddEvent,
-  onEditEvent,
+  onSaveEvent,
   onDeleteEvent,
 }) => {
   const year = currentMonth.getFullYear();
@@ -67,7 +65,7 @@ const Calendar: React.FC<CalendarProps> = ({
   while (cells.length % 7 !== 0) cells.push({ type: 'blank' });
 
   // Usa el hook para la lógica
-  const logic = useCalendarLogic(events, onAddEvent, onEditEvent, onDeleteEvent);
+  const logic = useCalendarLogic(events, onSaveEvent, onDeleteEvent);
 
   const months = [
     'Enero',

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { getDashboardData } from '@/server/services/dashboardApi';
-import { ICalendar, IEvent, IShift } from '@/interfaces/calendar.interface';
+import { ICalendar, IEvent, IEventExtended, IShift, IShiftExtended } from '@/interfaces/calendar.interface';
 import Calendar from '@/components/calendar/Calendar';
 import CalendarSelector from '@/components/calendarSelector/CalendarSelector';
 import Navbar from '@/components/layout/Navbar';
@@ -43,27 +43,6 @@ const DashboardPage: React.FC = () => {
     setCurrentMonth(newMonth);
   };
 
-  // Añadir evento y shift (si corresponde)
-  const handleAddEvent = async (event: Omit<IEvent, 'id'> & { shift?: Omit<IShift, 'id'> }) => {
-    let shiftId: number | undefined = undefined;
-    if (event.shift) {
-      const newShift = await createShift({ ...event.shift, eventId: -1 }); // eventId temporal
-      setShifts((prev) => [...prev, newShift]);
-      shiftId = newShift.id;
-    }
-    const newEvent = await createEvent({
-      ...event,
-      calendarId: selectedCalendarId!,
-      shiftsId: shiftId !== undefined ? [shiftId] : undefined
-    });
-    setEvents((prev) => [...prev, newEvent]);
-    // Si creaste un shift, actualiza su eventId
-    if (event.shift && shiftId) {
-      await updateEvent({ ...newEvent, shiftsId: shiftId !== undefined ? [shiftId] : undefined });
-      await createShift({ ...event.shift, id: shiftId, eventId: newEvent.id });
-    }
-  };
-
   const handleEditEvent = async (event: IEvent) => {
     const updated = await updateEvent(event);
     setEvents((prev) => prev.map(ev => ev.id === updated.id ? updated : ev));
@@ -74,6 +53,44 @@ const DashboardPage: React.FC = () => {
     setEvents((prev) => prev.filter(ev => ev.id !== event.id));
     // Opcional: también puedes borrar los shifts asociados a ese evento
     setShifts((prev) => prev.filter(sh => sh.eventId !== event.id));
+  };
+
+  const handleSaveEvent = async (
+    event: (IEventExtended & { shift?: IShiftExtended; isNew?: boolean; isEdit?: boolean }) | IEventExtended
+  ) => {
+    let shiftId: number | undefined = undefined;
+
+    // Si hay un shift nuevo (no tiene id)
+    if (event.shift?.isNew) {
+      const newShift = await createShift({ ...event.shift, eventId: event.id });
+      setShifts((prev) => [...prev, newShift]);
+      shiftId = newShift.id;
+    } else if (event.shift?.id) {
+      shiftId = event.shift.id;
+    } else if (Array.isArray(event.shiftsId) && event.shiftsId.length > 0) {
+      shiftId = event.shiftsId[0];
+    }
+
+    if (event.isNew) {
+      // Crear evento nuevo
+      const newEvent = await createEvent({
+        ...event,
+        calendarId: selectedCalendarId!,
+        shiftsId: shiftId !== undefined ? [shiftId] : undefined,
+      });
+      setEvents((prev) => [...prev, newEvent]);
+      /* // Si creaste un shift, actualiza su eventId
+      if (shiftId && 'shift' in event && event.shift && !event.shift.id) {
+        await createShift({ ...event.shift, id: shiftId, eventId: newEvent.id });
+      } */
+    } else if ('isEdit' in event && event.isEdit) {
+      // Editar evento existente
+      const updated = await updateEvent({
+        ...event,
+        shiftsId: shiftId !== undefined ? [shiftId] : undefined,
+      });
+      setEvents((prev) => prev.map(ev => ev.id === updated.id ? updated : ev));
+    }
   };
 
   return (
@@ -93,8 +110,7 @@ const DashboardPage: React.FC = () => {
               events={calendarEvents}
               shifts={shifts}
               onMonthChange={handleMonthChange}
-              onAddEvent={handleAddEvent}
-              onEditEvent={handleEditEvent}
+              onSaveEvent={handleSaveEvent}
               onDeleteEvent={handleDeleteEvent}
             />
           )}

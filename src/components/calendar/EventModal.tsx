@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { IShiftExtended } from '@/interfaces/calendar.interface';
+import type { IEventExtended, IShiftExtended } from '@/interfaces/calendar.interface';
 import { useShiftState } from '@/hooks/useShiftState';
 
 export interface EventFormValues {
@@ -7,6 +7,9 @@ export interface EventFormValues {
   date: Date;
   title: string;
   shift: IShiftExtended;
+  isNew?: boolean;
+  isEdit?: boolean;
+  isDelete?: boolean;
 }
 
 interface EventModalProps {
@@ -15,7 +18,7 @@ interface EventModalProps {
   onSave: (event: EventFormValues) => void;
   eventTitle: string;
   setEventTitle: (v: string) => void;
-  editingEvent: any;
+  editingEvent: IEventExtended | null;
   selectedDate: Date | null;
   shifts: IShiftExtended[];
 }
@@ -43,6 +46,7 @@ const EventModal: React.FC<EventModalProps> = ({
     if (shift === 'new') {
       shiftToSave = { ...newShift, id: Date.now(), isNew: true };
     } else {
+      (shift as IShiftExtended).isEdit = true;
       shiftToSave = shift as IShiftExtended;
     }
     onSave({
@@ -50,6 +54,8 @@ const EventModal: React.FC<EventModalProps> = ({
       date: new Date(date),
       title: eventTitle,
       shift: shiftToSave,
+      isNew: !editingEvent,
+      isEdit: !!editingEvent
     });
     onClose();
   };

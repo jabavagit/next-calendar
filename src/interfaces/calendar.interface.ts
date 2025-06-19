@@ -18,7 +18,7 @@ export interface ICalendar {
 
 export interface IShift {
   id: number;
-  eventId: number;
+  eventId?: number;
   name: string;
   color: string;
   startHour: string;
@@ -49,6 +49,7 @@ export interface IEventExtended extends IEvent {
   isDelete?: boolean;
   isNew?: boolean;
   dateObject?: Date; // Para uso en el cliente
+  shift?: IShiftExtended; // Para uso en el cliente
 }
 
 export interface ICalendarExtended extends ICalendar {
