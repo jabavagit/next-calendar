@@ -1,12 +1,13 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { getDashboardData } from '@/server/services/dashboardApi';
-import { ICalendar, IEvent, IEventExtended, IShift, IShiftExtended } from '@/interfaces/calendar.interface';
+import { ICalendar, ICalendarExtended, IEvent, IEventExtended, IShift, IShiftExtended } from '@/interfaces/calendar.interface';
 import Calendar from '@/components/calendar/Calendar';
 import CalendarSelector from '@/components/calendarSelector/CalendarSelector';
 import Navbar from '@/components/layout/Navbar';
 import { createEvent, updateEvent, deleteEvent } from '@/server/services/eventsApi';
 import { createShift } from '@/server/services/shiftsApi';
+import TabsCalendars from '@/components/calendar/tabsCalendars';
 
 const DashboardPage: React.FC = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -34,7 +35,9 @@ const DashboardPage: React.FC = () => {
         ...ev,
         shiftsId: [
           ...(ev.shiftsId || []),
-          ...shifts.filter(sh => sh.eventId === ev.id).map(sh => sh.id)
+          ...shifts
+            .filter(sh => (sh as any).eventId === ev.id)
+            .map(sh => sh.id)
         ],
       }))
     : [];
@@ -52,7 +55,7 @@ const DashboardPage: React.FC = () => {
     await deleteEvent(event.id);
     setEvents((prev) => prev.filter(ev => ev.id !== event.id));
     // Opcional: también puedes borrar los shifts asociados a ese evento
-    setShifts((prev) => prev.filter(sh => sh.eventId !== event.id));
+    //setShifts((prev) => prev.filter(sh => sh.eventId !== event.id));
   };
 
   const handleSaveEvent = async (
@@ -93,27 +96,41 @@ const DashboardPage: React.FC = () => {
     }
   };
 
+  async function handleAddCalendar(): Promise<void> {
+    const name = prompt('Enter a name for the new calendar:');
+    if (!name) return;
+    // Optionally, you could call an API to create the calendar on the server
+    /* const newCalendar: ICalendarExtended = {
+      id: Date.now(), // Temporary ID; replace with server-generated ID if needed
+      name,
+      type: '',
+      active: false
+    };
+    setCalendars(prev => [...prev, newCalendar]);
+    setSelectedCalendarId(newCalendar.id); */
+  }
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-grow flex flex-col p-0 m-0 h-full min-h-0">
-        <div className="flex-1 flex flex-col h-full min-h-0 px-2 sm:px-4 md:px-8 py-4 sm:py-6 md:py-10">
-          <CalendarSelector
+        <div className="bg-base-300 flex-1 flex flex-col h-full min-h-0 px-2 sm:px-4 md:px-8 py-4 sm:py-6 md:py-10">
+          <TabsCalendars
             calendars={calendars}
             selectedCalendarId={selectedCalendarId}
             setSelectedCalendarId={setSelectedCalendarId}
-            setCalendars={setCalendars}
-          />
-          {selectedCalendar && (
-            <Calendar
-              currentMonth={currentMonth}
-              events={calendarEvents}
-              shifts={shifts}
-              onMonthChange={handleMonthChange}
-              onSaveEvent={handleSaveEvent}
-              onDeleteEvent={handleDeleteEvent}
-            />
-          )}
+            onAddCalendar={handleAddCalendar}
+          >
+            {selectedCalendar && (
+              <Calendar
+                currentMonth={currentMonth}
+                events={calendarEvents}
+                shifts={shifts}
+                onMonthChange={handleMonthChange}
+                onSaveEvent={handleSaveEvent}
+                onDeleteEvent={handleDeleteEvent}
+              />
+            )}
+          </TabsCalendars>
         </div>
       </main>
     </div>

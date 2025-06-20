@@ -13,6 +13,7 @@
     "prepare": "rm -rf .husky && cp -r .config/husky .husky"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "autoprefixer": "^10.4.21",
     "next": "15.3.3",
     "postcss": "^8.5.4",
