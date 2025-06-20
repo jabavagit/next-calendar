@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import path from 'path';
 import { promises as fs } from 'fs';
-import type { IShift, IShiftExtended } from '@/interfaces/calendar.interface';
+import { toIShift, type IShift, type IShiftExtended } from '@/interfaces/calendar.interface';
 
 const filePath = path.join(process.cwd(), 'src', 'server', 'data', 'shifts.json');
 
@@ -26,8 +26,8 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const shifts = await readShifts();
-    const body: IShiftExtended = await request.json();
-    const { isEdit, isDelete, isNew, dateObject, ...shiftData } = body;
+    const shiftExtended: IShiftExtended = await request.json();
+    const shiftData: IShift = toIShift(shiftExtended);
     const newShift: IShift = { ...shiftData, id: Date.now(), createdAt: new Date().toISOString()};
     shifts.push(newShift);
     await writeShifts(shifts);
@@ -40,10 +40,10 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const shifts = await readShifts();
-    const body: IShiftExtended = await request.json();
-    const idx = shifts.findIndex((s) => s.id === body.id);
+    const shiftExtended: IShiftExtended = await request.json();
+    const idx = shifts.findIndex((s) => s.id === shiftExtended.id);
     if (idx === -1) return NextResponse.json({ error: 'No encontrado' }, { status: 404 });
-    const { isEdit, isDelete, isNew, dateObject, ...shiftData } = body;
+    const shiftData: IShift = toIShift(shiftExtended);
     const updated: IShift = { ...shiftData, updatedAt: new Date().toISOString() };
     shifts[idx] = updated;
     await writeShifts(shifts);

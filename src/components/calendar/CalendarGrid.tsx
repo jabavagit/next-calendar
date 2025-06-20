@@ -26,11 +26,14 @@ function isToday(date: Date) {
 }
 
 // Helper para obtener las iniciales de cada palabra
-function getInitials(title: string) {
-  return title
-    .split(' ')
-    .map((word) => word[0]?.toUpperCase() || '')
-    .join('');
+export function getInitials(title: string) {
+  const words = title.trim().split(/\s+/);
+  if (words.length === 1) {
+    // Si es una sola palabra, devuelve las dos primeras letras en mayúscula
+    return words[0].slice(0, 2).toUpperCase();
+  }
+  // Si son dos o más palabras, devuelve la primera letra de la primera y segunda palabra en mayúscula
+  return (words[0][0] + words[1][0]).toUpperCase();
 }
 
 function handlerClick(
@@ -89,7 +92,7 @@ const CalendarGrid: React.FC<CalendarGridProps & { shifts?: IShiftExtended[] }> 
             </div>
             {event ? (
               <div
-                className="flex-1 w-full flex items-center justify-center text-base-100 text-2xl font-bold rounded-b cursor-pointer border-2 border-base-100 hover:border-primary transition-colors"
+                className="flex-1 w-full flex items-center justify-center text-base-100 text-2xl font-bold rounded-b cursor-pointer hover:border-primary transition-colors"
                 style={{ backgroundColor: eventBgColor }}
                 title={eventShifts.map(s => s.name).join(', ') || event.title}
               >

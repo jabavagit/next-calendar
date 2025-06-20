@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import path from 'path';
 import { promises as fs } from 'fs';
-import type { IEvent, IEventExtended } from '@/interfaces/calendar.interface';
+import { toIEvent, type IEvent, type IEventExtended } from '@/interfaces/calendar.interface';
 
 const filePath = path.join(process.cwd(), 'src', 'server', 'data', 'events.json');
 
@@ -26,8 +26,8 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const events = await readEvents();
-    const body: IEventExtended = await request.json();
-    const { isEdit, isDelete, isNew, dateObject, ...eventData } = body;
+    const eventExtended: IEventExtended = await request.json();
+    const eventData: IEvent = toIEvent(eventExtended);
     const newEvent: IEvent = { ...eventData, id: Date.now(), createdAt: new Date().toISOString() };
     events.push(newEvent);
     await writeEvents(events);
@@ -40,10 +40,10 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const events = await readEvents();
-    const body: IEventExtended = await request.json();
-    const idx = events.findIndex((e) => e.id === body.id);
+    const eventExtended: IEventExtended = await request.json();
+    const idx = events.findIndex((e) => e.id === eventExtended.id);
     if (idx === -1) return NextResponse.json({ error: 'No encontrado' }, { status: 404 });
-    const { isEdit, isDelete, isNew, dateObject, ...eventData } = body;
+    const eventData: IEvent = toIEvent(eventExtended);
     const updated: IEvent = { ...eventData, updatedAt: new Date().toISOString() };
     events[idx] = updated;
     await writeEvents(events);

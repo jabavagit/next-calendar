@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import type { IEventExtended, IShiftExtended } from '@/interfaces/calendar.interface';
 import { useShiftState } from '@/hooks/useShiftState';
+import { getInitials } from './CalendarGrid';
+import Select from 'react-select';
 
 export interface EventFormValues {
   id: number;
@@ -60,6 +62,20 @@ const EventModal: React.FC<EventModalProps> = ({
     onClose();
   };
 
+  const shiftOptions = [
+    ...shifts.map(shiftOption => ({
+      value: shiftOption.id,
+      label: shiftOption.name,
+      color: shiftOption.color,
+      info: `(${shiftOption.startHour} - ${shiftOption.endHour})`,
+      initials: getInitials(shiftOption.name),
+    })),
+    {
+      value: 'new',
+      label: '+ New shift...'
+    }
+  ];
+
   if (!open) return null;
 
   return (
@@ -85,40 +101,48 @@ const EventModal: React.FC<EventModalProps> = ({
           onChange={(e) => setDate(e.target.value)}
         />
         <label className="block text-sm font-medium mt-2 mb-1">Shift</label>
-        <select
-          className="input input-bordered w-full"
-          value={
-            shift === 'new'
-              ? 'new'
-              : typeof shift === 'object' && shift.id
-                ? shift.id
-                : ''
-          }
-          onChange={handleShiftSelect}
-        >
-          <option value="">Select a shift</option>
-          {shifts.map(shiftOption => (
-            <option key={shiftOption.id} value={shiftOption.id}>
-              {shiftOption.name} ({shiftOption.startHour} - {shiftOption.endHour})
-            </option>
-          ))}
-          <option value="new">+ New shift...</option>
-        </select>
+        <Select
+          className="w-full"
+          value={shiftOptions.find(opt => opt.value === (typeof shift === 'object' ? shift.id : shift))}
+          onChange={option => handleShiftSelect({ target: { value: option?.value?.toString() ?? '' } } as React.ChangeEvent<HTMLSelectElement>)}
+          options={shiftOptions}
+          getOptionLabel={option => option.label}
+          formatOptionLabel={option => (
+            <span>
+              <span
+                style={{
+                  backgroundColor: 'color' in option ? option.color : undefined,
+                  color: '#fff',
+                  borderRadius: 4,
+                  padding: '2px 6px',
+                  marginRight: 8,
+                  display: 'inline-block',
+                }}
+              >
+                {'initials' in option ? option.initials : ''}
+              </span>
+              {option.label} {'info' in option && option.info ? <span className="text-xs text-gray-500">{option.info}</span> : ''}
+            </span>
+          )}
+          getOptionValue={option => option.value.toString()}
+        />
         {shift === 'new' && (
-          <div className="mt-2 p-2 border rounded bg-gray-50 flex flex-col gap-2">
-            <input
-              className="input input-bordered"
-              placeholder="Shift name"
-              value={newShift.name}
-              onChange={e => handleNewShiftChange('name', e.target.value)}
-            />
-            <input
-              type="color"
-              className="w-10 h-10"
-              value={newShift.color}
-              onChange={e => handleNewShiftChange('color', e.target.value)}
-            />
-            <div className="flex flex-col md:flex-row gap-2">
+          <div className="p-2 rounded bg-gray-200 flex flex-col gap-2">
+            <div className="flex flex-col p-2 md:flex-row gap-2">
+              <input
+                className="input input-bordered"
+                placeholder="Shift name"
+                value={newShift.name}
+                onChange={e => handleNewShiftChange('name', e.target.value)}
+              />
+              <input
+                type="color"
+                className="w-10 h-10"
+                value={newShift.color}
+                onChange={e => handleNewShiftChange('color', e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col md:flex-row p-2 gap-2">
               <input
                 type="time"
                 className="input input-bordered flex-1"

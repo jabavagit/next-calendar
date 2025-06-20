@@ -1,41 +1,41 @@
 [
   {
-    "id": 1,
+    "id": 1750432690571,
     "name": "Turno Mañana",
     "color": "#e07a5f",
     "startHour": "08:00",
     "endHour": "15:00"
   },
   {
-    "id": 2,
+    "id": 1750432690572,
     "name": "Turno Tarde",
     "color": "#81b29a",
     "startHour": "15:00",
-    "endHour": "22:00"
+    "endHour": "22:00",
+    "createdAt": "2025-06-20T15:18:10.576Z"
   },
   {
-    "id": 3,
+    "id": 1750432690573,
     "name": "Turno Noche",
     "color": "#f2cc8f",
     "startHour": "22:00",
-    "endHour": "08:00"
+    "endHour": "08:00",
+    "createdAt": "2025-06-20T15:18:10.576Z"
   },
   {
-    "id": 1750358637797,
-    "eventId": 1,
-    "name": "turno nuevo",
+    "id": 1750432690574,
+    "name": "turno raro",
+    "color": "#a26a2a",
+    "startHour": "19:19",
+    "endHour": "23:23",
+    "createdAt": "2025-06-20T15:18:10.576Z"
+  },
+  {
+    "id": 1750433019238,
+    "name": "nuevooo",
     "color": "#000000",
-    "startHour": "20:43",
-    "endHour": "02:49",
-    "createdAt": "2025-06-19T18:43:57.797Z"
-  },
-  {
-    "id": 1750359805353,
-    "eventId": 2,
-    "name": "ttt ggg",
-    "color": "#91cb25",
-    "startHour": "23:05",
-    "endHour": "22:04",
-    "createdAt": "2025-06-19T19:03:25.353Z"
+    "startHour": "18:24",
+    "endHour": "23:29",
+    "createdAt": "2025-06-20T15:23:39.238Z"
   }
 ]

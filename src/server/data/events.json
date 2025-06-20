@@ -3,28 +3,41 @@
     "id": 1,
     "calendarId": 1,
     "title": "Turno Mañana",
-    "date": "2025-06-20",
+    "date": "2025-06-20T00:00:00.000Z",
     "shiftsId": [
-      1
-    ]
+      1750432690571
+    ],
+    "updatedAt": "2025-06-20T15:23:09.309Z"
   },
   {
     "id": 2,
-    "title": "Turno Tarde",
     "calendarId": 1,
+    "title": "Turno farde",
     "date": "2025-06-21T00:00:00.000Z",
-    "shift": {
-      "id": 1750359805333,
-      "eventId": 0,
-      "name": "ttt ggg",
-      "color": "#91cb25",
-      "startHour": "23:05",
-      "endHour": "22:04",
-      "isNew": true
-    },
     "shiftsId": [
-      1750359805353
+      1750432690573
     ],
-    "updatedAt": "2025-06-19T19:03:25.604Z"
+    "updatedAt": "2025-06-20T15:20:31.235Z"
+  },
+  {
+    "id": 1750433019399,
+    "calendarId": 1,
+    "title": "Nuevo",
+    "date": "2025-06-18T00:00:00.000Z",
+    "shiftsId": [
+      1750433019238
+    ],
+    "createdAt": "2025-06-20T15:23:39.399Z"
+  },
+  {
+    "id": 1750434467581,
+    "calendarId": 1,
+    "title": "ttt gggg",
+    "date": "2025-06-11",
+    "shiftsId": [
+      1750432690574
+    ],
+    "createdAt": "2025-06-20T15:47:47.581Z",
+    "updatedAt": "2025-06-20T15:47:58.183Z"
   }
 ]

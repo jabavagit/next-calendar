@@ -7,7 +7,6 @@ export function useShiftState(editingEvent: IEventExtended | null, selectedDate:
   const [shift, setShift] = useState<IShiftExtended | string>('');
   const [newShift, setNewShift] = useState<IShiftExtended>({
     id: 0,
-    eventId: 0,
     name: '',
     color: '#000000',
     startHour: '',
