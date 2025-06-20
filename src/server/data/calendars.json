@@ -16,5 +16,23 @@
     "createdAt": "2023-10-01T12:00:00Z",
     "updatedAt": "2023-10-01T12:00:00Z",
     "active": true
+  },
+  {
+    "id": 3,
+    "name": "Vacaciones",
+    "description": "Calendario de vacaciones",
+    "type": "holiday",
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z",
+    "active": true
+  },
+  {
+    "id": 4,
+    "name": "Vacaciones",
+    "description": "Calendario de vacaciones",
+    "type": "holiday",
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z",
+    "active": true
   }
 ]
