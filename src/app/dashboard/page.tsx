@@ -30,7 +30,7 @@ const DashboardPage: React.FC = () => {
 
   useEffect(() => {
     if (calendars.length > 0) setSelectedCalendarId(calendars[0].id);
-  }, [calendars]);
+  }, [calendars, setSelectedCalendarId]);
 
   const selectedCalendar = calendars.find((c) => c.id === selectedCalendarId);
 
@@ -47,21 +47,12 @@ const DashboardPage: React.FC = () => {
         }))
     : [];
 
-  const handleMonthChange = (newMonth: Date) => {
-    setCurrentMonth(newMonth);
-  };
+  const handleMonthChange = (newMonth: Date) => setCurrentMonth(newMonth);
 
   const handleEditEvent = async (event: IEvent) => {
     const updated = await updateEvent(event);
     setEvents((prev) => prev.map((ev) => (ev.id === updated.id ? updated : ev)));
   };
-
-  /* const handleDeleteEvent = async (event: IEvent) => {
-    await deleteEvent(event.id);
-    setEvents((prev) => prev.filter(ev => ev.id !== event.id));
-    // Opcional: también puedes borrar los shifts asociados a ese evento
-    //setShifts((prev) => prev.filter(sh => sh.eventId !== event.id));
-  }; */
 
   const handleSaveEvent = async (
     event:
@@ -70,7 +61,6 @@ const DashboardPage: React.FC = () => {
   ) => {
     let shiftId: number | undefined = undefined;
 
-    // Si hay un shift nuevo (no tiene id)
     if (event.shift?.isNew) {
       const newShift = await createShift({ ...event.shift });
       setShifts((prev) => [...prev, newShift]);
@@ -82,19 +72,13 @@ const DashboardPage: React.FC = () => {
     }
 
     if (event.isNew) {
-      // Crear evento nuevo
       const newEvent = await createEvent({
         ...event,
         calendarId: selectedCalendarId!,
         shiftsId: shiftId !== undefined ? [shiftId] : undefined,
       });
       setEvents((prev) => [...prev, newEvent]);
-      /* // Si creaste un shift, actualiza su eventId
-      if (shiftId && 'shift' in event && event.shift && !event.shift.id) {
-        await createShift({ ...event.shift, id: shiftId, eventId: newEvent.id });
-      } */
     } else if ('isEdit' in event && event.isEdit) {
-      // Editar evento existente
       const updated = await updateEvent({
         ...event,
         shiftsId: shiftId !== undefined ? [shiftId] : undefined,
@@ -106,21 +90,14 @@ const DashboardPage: React.FC = () => {
   async function handleAddCalendar(): Promise<void> {
     const name = prompt('Enter a name for the new calendar:');
     if (!name) return;
-    // Optionally, you could call an API to create the calendar on the server
-    /* const newCalendar: ICalendarExtended = {
-      id: Date.now(), // Temporary ID; replace with server-generated ID if needed
-      name,
-      type: '',
-      active: false
-    };
-    setCalendars(prev => [...prev, newCalendar]);
-    setSelectedCalendarId(newCalendar.id); */
+    // Aquí podrías llamar a la API para crear el calendario
   }
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-base-200">
       <Navbar />
       <main className="flex-grow flex flex-col p-0 m-0 h-full min-h-0">
-        <div className="bg-base-300 flex-1 flex flex-col h-full min-h-0 px-2 sm:px-4 md:px-8 py-4 sm:py-6 md:py-10">
+        <div className="flex-1 flex flex-col h-full min-h-0 px-2 sm:px-4 md:px-8 py-4 sm:py-6 md:py-10">
           <TabsCalendars
             calendars={calendars}
             selectedCalendarId={selectedCalendarId}

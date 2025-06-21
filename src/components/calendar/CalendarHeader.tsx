@@ -36,7 +36,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
     </button>
     <div className="flex items-center gap-2 mx-2 flex-1 justify-center">
       <select
-        className="select select-sm max-w-[120px]"
+        className="select select-sm max-w-[120px] bg-base-100"
         value={month}
         onChange={(e) => onMonthChange(new Date(year, Number(e.target.value), 1))}
       >
@@ -47,7 +47,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         ))}
       </select>
       <select
-        className="select select-sm max-w-[90px]"
+        className="select select-sm max-w-[90px] bg-base-100"
         value={year}
         onChange={(e) => onMonthChange(new Date(Number(e.target.value), month, 1))}
       >
@@ -58,7 +58,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         ))}
       </select>
       <button
-        className="btn btn-link btn-xs px-2 py-0 ml-1"
+        className="btn btn-link btn-xs px-2 py-0 ml-1 text-primary"
         style={{ minHeight: 0, height: 28 }}
         onClick={goToToday}
         type="button"

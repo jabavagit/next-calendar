@@ -7,8 +7,12 @@ const CalendarDayNames: React.FC = () => (
     {dayNames.map((day, idx) => (
       <div
         key={day}
-        className={`text-center font-semibold py-1 rounded
-          ${idx === 5 || idx === 6 ? 'bg-warning/30 text-warning' : 'bg-base-200 text-base-content/70'}`}
+        className={`text-center font-medium py-1 rounded-lg
+          ${
+            idx === 5 || idx === 6
+              ? 'bg-warning/10 text-warning'
+              : 'bg-base-200 text-base-content/70'
+          }`}
       >
         {day}
       </div>

@@ -11,14 +11,6 @@ interface CalendarGridProps {
   onDelete: (event: IEventExtended) => void;
 }
 
-interface propsHandlerClick {
-  e: React.MouseEvent<HTMLDivElement, MouseEvent>;
-  event?: IEventExtended;
-  date?: string;
-  onDayClick: (date: Date) => void;
-  onEditEvent: (event: IEventExtended) => void;
-}
-
 function isToday(date: Date) {
   const today = new Date();
   return (
@@ -32,10 +24,8 @@ function isToday(date: Date) {
 export function getInitials(title: string) {
   const words = title.trim().split(/\s+/);
   if (words.length === 1) {
-    // Si es una sola palabra, devuelve las dos primeras letras en mayúscula
     return words[0].slice(0, 2).toUpperCase();
   }
-  // Si son dos o más palabras, devuelve la primera letra de la primera y segunda palabra en mayúscula
   return (words[0][0] + words[1][0]).toUpperCase();
 }
 
@@ -58,7 +48,7 @@ const CalendarGrid: React.FC<CalendarGridProps & { shifts?: IShiftExtended[] }> 
   cells,
   onDayClick,
   onEditEvent,
-  shifts: shifts = [],
+  shifts = [],
 }) => (
   <div className="grid grid-cols-7 gap-2">
     {cells.map((cell, idx) => {

@@ -87,7 +87,7 @@ const Calendar: React.FC<CalendarProps> = ({
   };
 
   return (
-    <div>
+    <div className="bg-base-100 shadow p-4 md:p-8 mx-auto">
       <CalendarHeader
         year={year}
         month={month}

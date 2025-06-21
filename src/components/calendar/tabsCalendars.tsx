@@ -30,6 +30,16 @@ const iconColorPalette = [
   'text-error',
 ];
 
+const hoverBorderPalette = [
+  'hover:border-primary',
+  'hover:border-secondary',
+  'hover:border-accent',
+  'hover:border-info',
+  'hover:border-success',
+  'hover:border-warning',
+  'hover:border-error',
+];
+
 const TabsCalendars: React.FC<TabsCalendarsProps> = ({
   calendars,
   selectedCalendarId,
@@ -46,20 +56,35 @@ const TabsCalendars: React.FC<TabsCalendarsProps> = ({
       ? iconColorPalette[selectedIdx % iconColorPalette.length]
       : 'text-base-content';
 
+  function getTabClass({ isSelected, idx }: { isSelected: boolean; idx: number }) {
+    let base =
+      'tab transition-all duration-200 flex items-center gap-2 transition-colors border-b-1';
+    if (isSelected) {
+      base += ` tab-active font-bold ${colorPalette[idx % colorPalette.length]}`;
+    } else {
+      base += ` bg-gray-100 border-transparent hover:border-b-2 ${hoverBorderPalette[idx % hoverBorderPalette.length]}`;
+    }
+    return base;
+  }
+
   return (
     <div className="mb-4">
       {/* Tabs para escritorio */}
-      <div className="hidden sm:flex tabs tabs-lift">
+      <div className={`tabs flex-wrap sm:flex-nowrap bg-base-100 ${borderColor}`}>
+        {/* <div className={`hidden sm:flex tabs tabs-lift rounded-t-lg ${borderColor} shadow-sm`} > */}
         {calendars.map((calendar, idx) => (
           <button
             key={calendar.id}
-            className={`tab transition-all duration-200 flex items-center gap-2 ${selectedCalendarId === calendar.id ? `tab-active font-bold` : ''} border-b-2 ${selectedCalendarId === calendar.id ? colorPalette[idx % colorPalette.length] : 'border-transparent'}`}
+            className={getTabClass({
+              isSelected: selectedCalendarId === calendar.id,
+              idx,
+            })}
             type="button"
             onClick={() => setSelectedCalendarId(calendar.id)}
             style={{ borderBottomWidth: 3 }}
           >
             <span
-              className={`inline-flex items-center justify-center rounded-full ${iconColorPalette[idx % iconColorPalette.length]}`}
+              className={`inline-flex items-center justify-center rounded-full ${iconColorPalette[idx % iconColorPalette.length]} bg-base-200`}
               style={{ width: 28, height: 28 }}
             >
               <CalendarDaysIcon className="w-5 h-5" />
@@ -105,11 +130,7 @@ const TabsCalendars: React.FC<TabsCalendarsProps> = ({
         </button>
       </div>
       {/* Renderiza children debajo de las tabs/dropdown, con borde del color del tab activo */}
-      {children && (
-        <div className={`bg-base-100 p-5 pb-10 rounded-b-lg border-l-1 border-b-1 ${borderColor}`}>
-          {children}
-        </div>
-      )}
+      {children && <div className={` pb-10 rounded-b-lg`}>{children}</div>}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import type { IEventExtended, IShiftExtended } from '@/interfaces/calendar.interface';
 import { useShiftState } from '@/hooks/useShiftState';
 import { getInitials } from './CalendarGrid';
@@ -75,7 +75,7 @@ const EventModal: React.FC<EventModalProps> = ({
     })),
     {
       value: 'new',
-      label: '+ New shift...',
+      label: '+ Nuevo turno...',
     },
   ];
 
@@ -83,27 +83,27 @@ const EventModal: React.FC<EventModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-      <div className="bg-base-100 p-6 rounded shadow-lg min-w-[320px] flex flex-col gap-3 w-full max-w-md">
+      <div className="bg-base-100 p-6 rounded-xl shadow-lg min-w-[320px] flex flex-col gap-3 w-full max-w-md">
         <div className="text-lg font-semibold mb-2">
-          {editingEvent ? 'Edit event' : 'New event'} -{' '}
-          {date ? new Date(date + 'T00:00:00').toLocaleDateString() : ''}
+          {editingEvent ? 'Editar evento' : 'Nuevo evento'}{' '}
+          {date ? `- ${new Date(date + 'T00:00:00').toLocaleDateString()}` : ''}
         </div>
-        <label className="block text-sm font-medium mb-1">Event name</label>
+        <label className="block text-sm font-medium mb-1">Nombre del evento</label>
         <input
           className="input input-bordered w-full"
-          placeholder="Event title"
+          placeholder="Título del evento"
           value={eventTitle}
           onChange={(e) => setEventTitle(e.target.value)}
           autoFocus
         />
-        <label className="block text-sm font-medium mt-2 mb-1">Date</label>
+        <label className="block text-sm font-medium mt-2 mb-1">Fecha</label>
         <input
           type="date"
           className="input input-bordered w-full"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
-        <label className="block text-sm font-medium mt-2 mb-1">Shift</label>
+        <label className="block text-sm font-medium mt-2 mb-1">Turno</label>
         <Select
           className="w-full"
           value={shiftOptions.find(
@@ -141,11 +141,11 @@ const EventModal: React.FC<EventModalProps> = ({
           getOptionValue={(option) => option.value.toString()}
         />
         {shift === 'new' && (
-          <div className="p-2 rounded bg-gray-200 flex flex-col gap-2">
+          <div className="p-2 rounded bg-base-200 flex flex-col gap-2">
             <div className="flex flex-col p-2 md:flex-row gap-2">
               <input
                 className="input input-bordered"
-                placeholder="Shift name"
+                placeholder="Nombre del turno"
                 value={newShift.name}
                 onChange={(e) => handleNewShiftChange('name', e.target.value)}
               />
@@ -162,14 +162,14 @@ const EventModal: React.FC<EventModalProps> = ({
                 className="input input-bordered flex-1"
                 value={newShift.startHour}
                 onChange={(e) => handleNewShiftChange('startHour', e.target.value)}
-                placeholder="Start hour"
+                placeholder="Hora inicio"
               />
               <input
                 type="time"
                 className="input input-bordered flex-1"
                 value={newShift.endHour}
                 onChange={(e) => handleNewShiftChange('endHour', e.target.value)}
-                placeholder="End hour"
+                placeholder="Hora fin"
               />
             </div>
           </div>
@@ -186,10 +186,10 @@ const EventModal: React.FC<EventModalProps> = ({
                 : typeof shift === 'object' && !shift.id)
             }
           >
-            {editingEvent ? 'Save' : 'Create'}
+            {editingEvent ? 'Guardar' : 'Crear'}
           </button>
           <button className="btn btn-ghost btn-sm" onClick={onClose}>
-            Cancel
+            Cancelar
           </button>
         </div>
       </div>
