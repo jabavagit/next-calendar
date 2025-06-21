@@ -4,9 +4,7 @@
     "calendarId": 1,
     "title": "Turno Mañana",
     "date": "2025-06-20T00:00:00.000Z",
-    "shiftsId": [
-      1750432690571
-    ],
+    "shiftsId": [1750432690571],
     "updatedAt": "2025-06-20T15:23:09.309Z"
   },
   {
@@ -14,9 +12,7 @@
     "calendarId": 1,
     "title": "Turno Tarde",
     "date": "2025-06-21T00:00:00.000Z",
-    "shiftsId": [
-      1750432690573
-    ],
+    "shiftsId": [1750432690573],
     "updatedAt": "2025-06-20T15:20:31.235Z"
   }
 ]

@@ -4,16 +4,8 @@ import {
   createCalendarsBatch,
   updateCalendarsBatch,
 } from '@/server/services/api/calendarApi';
-import {
-  getEvents,
-  createEventsBatch,
-  updateEventsBatch,
-} from '@/server/services/api/eventsApi';
-import {
-  getShifts,
-  createShiftsBatch,
-  updateShiftsBatch,
-} from '@/server/services/api/shiftsApi';
+import { getEvents, createEventsBatch, updateEventsBatch } from '@/server/services/api/eventsApi';
+import { getShifts, createShiftsBatch, updateShiftsBatch } from '@/server/services/api/shiftsApi';
 import type {
   ICalendar,
   ICalendarExtended,
@@ -38,7 +30,7 @@ async function syncCalendars() {
   const toCreate: Omit<ICalendarExtended, 'id'>[] = [];
 
   for (const calendar of localCalendars) {
-    const exists = remoteCalendars.some(c => c.id === calendar.id);
+    const exists = remoteCalendars.some((c) => c.id === calendar.id);
     if (exists) {
       toUpdate.push(calendar);
     } else {
@@ -76,7 +68,7 @@ async function syncEvents() {
   const toCreate: Omit<IEventExtended, 'id'>[] = [];
 
   for (const event of localEvents) {
-    const exists = remoteEvents.some(e => e.id === event.id);
+    const exists = remoteEvents.some((e) => e.id === event.id);
     if (exists) {
       toUpdate.push(event);
     } else {
@@ -114,7 +106,7 @@ async function syncShifts() {
   const toCreate: Omit<IShiftExtended, 'id'>[] = [];
 
   for (const shift of localShifts) {
-    const exists = remoteShifts.some(s => s.id === shift.id);
+    const exists = remoteShifts.some((s) => s.id === shift.id);
     if (exists) {
       toUpdate.push(shift);
     } else {

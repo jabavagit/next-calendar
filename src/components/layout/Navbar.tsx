@@ -50,7 +50,7 @@ const Navbar: React.FC = () => {
             {/* Puedes añadir más opciones aquí */}
           </ul>
         </div>
-        <div className='flex items-center ml-2'>
+        <div className="flex items-center ml-2">
           <span className="text-xl font-bold block">Calendar Dashboard</span>
         </div>
       </div>

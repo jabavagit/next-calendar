@@ -63,9 +63,7 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
                 style={{ minHeight: '36px' }}
               />
               <div className="flex gap-0">
-                <button
-                  className="btn btn-sm btn-success h-9 rounded-none rounded-l-md"
-                >
+                <button className="btn btn-sm btn-success h-9 rounded-none rounded-l-md">
                   Crear
                 </button>
                 <button
@@ -163,7 +161,7 @@ const CalendarSelector: React.FC<CalendarSelectorProps> = ({
             open={showDeleteConfirm}
             onClose={() => setShowDeleteConfirm(false)}
             value=""
-            onChange={() => { }}
+            onChange={() => {}}
             onConfirm={async () => handleDeleteCalendar(currentId)}
             onCancel={() => setShowDeleteConfirm(false)}
             confirmLabel="Sí"

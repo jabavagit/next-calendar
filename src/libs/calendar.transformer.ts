@@ -1,4 +1,4 @@
-import { ICalendar, ICalendarExtended } from "@/interfaces/calendar.interface";
+import { ICalendar, ICalendarExtended } from '@/interfaces/calendar.interface';
 
 // Transforma un ICalendar en ICalendarExtended
 function toCalendarExtended(calendar: ICalendar): ICalendarExtended {
@@ -23,5 +23,4 @@ export function toCalendarBase(calendar: ICalendarExtended): ICalendar {
 }
 
 // Transforma un array de ICalendarExtended en ICalendar[]
-export const toCalendarsBase = (data: ICalendarExtended[]): ICalendar[] =>
-  data.map(toCalendarBase);
+export const toCalendarsBase = (data: ICalendarExtended[]): ICalendar[] => data.map(toCalendarBase);

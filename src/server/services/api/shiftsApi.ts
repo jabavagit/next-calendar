@@ -27,7 +27,9 @@ export async function deleteShift(id: number): Promise<void> {
 
 // --- Batch endpoints ---
 
-export async function createShiftsBatch(shifts: Omit<IShiftExtended, 'id'>[]): Promise<IShiftExtended[]> {
+export async function createShiftsBatch(
+  shifts: Omit<IShiftExtended, 'id'>[],
+): Promise<IShiftExtended[]> {
   const baseShifts = toShiftsBase(shifts as IShiftExtended[]);
   const created = await apiPost<IShift[]>(`${API_URL}/batch`, baseShifts);
   return toShiftsExtended(created);

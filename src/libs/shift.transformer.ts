@@ -1,4 +1,4 @@
-import { IShift, IShiftExtended } from "@/interfaces/calendar.interface";
+import { IShift, IShiftExtended } from '@/interfaces/calendar.interface';
 
 // Transforma un IShift en IShiftExtended
 function toShiftExtended(shift: IShift): IShiftExtended {
@@ -11,8 +11,7 @@ function toShiftExtended(shift: IShift): IShiftExtended {
 }
 
 // Transforma un array de IShift en IShiftExtended[]
-export const toShiftsExtended = (data: IShift[]): IShiftExtended[] =>
-  data.map(toShiftExtended);
+export const toShiftsExtended = (data: IShift[]): IShiftExtended[] => data.map(toShiftExtended);
 
 // Transforma un IShiftExtended en IShift (elimina campos extendidos)
 export function toShiftBase(shift: IShiftExtended): IShift {
@@ -21,5 +20,4 @@ export function toShiftBase(shift: IShiftExtended): IShift {
 }
 
 // Transforma un array de IShiftExtended en IShift[]
-export const toShiftsBase = (data: IShiftExtended[]): IShift[] =>
-  data.map(toShiftBase);
+export const toShiftsBase = (data: IShiftExtended[]): IShift[] => data.map(toShiftBase);

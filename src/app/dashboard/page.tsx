@@ -1,10 +1,16 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { ICalendar, IEvent, IEventExtended, IShift, IShiftExtended } from '@/interfaces/calendar.interface';
+import {
+  ICalendar,
+  IEvent,
+  IEventExtended,
+  IShift,
+  IShiftExtended,
+} from '@/interfaces/calendar.interface';
 import Calendar from '@/components/calendar/Calendar';
 import Navbar from '@/components/layout/Navbar';
 import TabsCalendars from '@/components/calendar/tabsCalendars';
-import { useDashboardData } from "@/hooks/useDashboardData";
+import { useDashboardData } from '@/hooks/useDashboardData';
 import { updateEvent, createEvent } from '@/server/services/api/eventsApi';
 import { createShift } from '@/server/services/api/shiftsApi';
 
@@ -31,16 +37,14 @@ const DashboardPage: React.FC = () => {
   // Filtra eventos para el calendario seleccionado
   const calendarEvents = selectedCalendar
     ? events
-      .filter(ev => ev.calendarId === selectedCalendar.id)
-      .map(ev => ({
-        ...ev,
-        shiftsId: [
-          ...(ev.shiftsId || []),
-          ...shifts
-            .filter(sh => (sh as any).eventId === ev.id)
-            .map(sh => sh.id)
-        ],
-      }))
+        .filter((ev) => ev.calendarId === selectedCalendar.id)
+        .map((ev) => ({
+          ...ev,
+          shiftsId: [
+            ...(ev.shiftsId || []),
+            ...shifts.filter((sh) => (sh as any).eventId === ev.id).map((sh) => sh.id),
+          ],
+        }))
     : [];
 
   const handleMonthChange = (newMonth: Date) => {
@@ -49,7 +53,7 @@ const DashboardPage: React.FC = () => {
 
   const handleEditEvent = async (event: IEvent) => {
     const updated = await updateEvent(event);
-    setEvents((prev) => prev.map(ev => ev.id === updated.id ? updated : ev));
+    setEvents((prev) => prev.map((ev) => (ev.id === updated.id ? updated : ev)));
   };
 
   /* const handleDeleteEvent = async (event: IEvent) => {
@@ -60,7 +64,9 @@ const DashboardPage: React.FC = () => {
   }; */
 
   const handleSaveEvent = async (
-    event: (IEventExtended & { shift?: IShiftExtended; isNew?: boolean; isEdit?: boolean }) | IEventExtended
+    event:
+      | (IEventExtended & { shift?: IShiftExtended; isNew?: boolean; isEdit?: boolean })
+      | IEventExtended,
   ) => {
     let shiftId: number | undefined = undefined;
 
@@ -93,7 +99,7 @@ const DashboardPage: React.FC = () => {
         ...event,
         shiftsId: shiftId !== undefined ? [shiftId] : undefined,
       });
-      setEvents((prev) => prev.map(ev => ev.id === updated.id ? updated : ev));
+      setEvents((prev) => prev.map((ev) => (ev.id === updated.id ? updated : ev)));
     }
   };
 
@@ -128,7 +134,7 @@ const DashboardPage: React.FC = () => {
                 shifts={shifts}
                 onMonthChange={handleMonthChange}
                 onSaveEvent={handleSaveEvent}
-              // onDeleteEvent={handleDeleteEvent}
+                // onDeleteEvent={handleDeleteEvent}
               />
             )}
           </TabsCalendars>

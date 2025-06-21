@@ -12,8 +12,6 @@ const compat = new FlatCompat({
 
 const [baseConfig] = compat.extends(
   'next/core-web-vitals',
-  'next/typescript',
-  'plugin:@typescript-eslint/recommended',
   'plugin:prettier/recommended',
 );
 

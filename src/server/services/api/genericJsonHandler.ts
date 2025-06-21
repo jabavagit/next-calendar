@@ -62,6 +62,6 @@ export function createJsonHandlers<T = any>(relativeJsonPath: string) {
       } catch (error) {
         return NextResponse.json({ error: 'Error borrando.' }, { status: 500 });
       }
-    }
+    },
   };
 }

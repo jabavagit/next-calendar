@@ -25,23 +25,21 @@ export function useCalendarLogic(
   // Corrige la asignación de fecha para evitar desfase de zona horaria
   const handleDayClick = (date: Date) => {
     // Solo la parte de año, mes y día, sin hora
-    
+
     setSelectedDate(new Date(toLocalISODate(date)));
     setEventTitle('');
     setEditingEvent(null);
   };
-  
+
   const handleSaveEvent = (form: EventFormValues) => {
     if (!form.title.trim() || !form.date || !form.shift) return;
 
     const isEdit = !!editingEvent;
     // Usa toLocalISODate para guardar la fecha correctamente
-    const dateString = typeof form.date === 'string'
-      ? form.date
-      : toLocalISODate(form.date);
+    const dateString = typeof form.date === 'string' ? form.date : toLocalISODate(form.date);
 
     const eventToSave: IEventExtended = {
-      id: isEdit ? editingEvent!.id : form.id ?? Date.now(),
+      id: isEdit ? editingEvent!.id : (form.id ?? Date.now()),
       title: form.title,
       dateObject: new Date(dateString),
       calendarId: editingEvent?.calendarId ?? 0,
@@ -73,7 +71,7 @@ export function useCalendarLogic(
       id: Date.now(),
       title: quickEventTitle,
       date: dateString,
-      calendarId: 0
+      calendarId: 0,
     } as IEventExtended);
     setShowQuickCreate(false);
     setQuickEventTitle('');

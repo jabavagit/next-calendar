@@ -2,17 +2,20 @@ import { IEventExtended, IShiftExtended } from '@/interfaces/calendar.interface'
 import React from 'react';
 
 interface CalendarGridProps {
-  cells: ({ type: 'blank' } | { type: 'day'; date: Date; dayNum: number; events: IEventExtended[] })[];
+  cells: (
+    | { type: 'blank' }
+    | { type: 'day'; date: Date; dayNum: number; events: IEventExtended[] }
+  )[];
   onDayClick: (date: Date) => void;
   onEditEvent: (event: IEventExtended) => void;
   onDelete: (event: IEventExtended) => void;
 }
 
 interface propsHandlerClick {
-  e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  event?: IEventExtended,
-  date?: string,
-  onDayClick: (date: Date) => void,
+  e: React.MouseEvent<HTMLDivElement, MouseEvent>;
+  event?: IEventExtended;
+  date?: string;
+  onDayClick: (date: Date) => void;
   onEditEvent: (event: IEventExtended) => void;
 }
 
@@ -41,7 +44,7 @@ function handlerClick(
   event: IEventExtended | undefined,
   date: Date,
   onDayClick: (date: Date) => void,
-  onEditEvent: (event: IEventExtended) => void
+  onEditEvent: (event: IEventExtended) => void,
 ) {
   if (!event) {
     onDayClick(date);
@@ -94,10 +97,10 @@ const CalendarGrid: React.FC<CalendarGridProps & { shifts?: IShiftExtended[] }> 
               <div
                 className="flex-1 w-full flex items-center justify-center text-base-100 text-2xl font-bold rounded-b cursor-pointer hover:border-primary transition-colors"
                 style={{ backgroundColor: eventBgColor }}
-                title={eventShifts.map(s => s.name).join(', ') || event.title}
+                title={eventShifts.map((s) => s.name).join(', ') || event.title}
               >
                 {eventShifts.length > 0
-                  ? eventShifts.map(s => getInitials(s.name)).join(' ')
+                  ? eventShifts.map((s) => getInitials(s.name)).join(' ')
                   : getInitials(event.title)}
               </div>
             ) : (

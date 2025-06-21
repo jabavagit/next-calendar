@@ -44,8 +44,7 @@ const Calendar: React.FC<CalendarProps> = ({
         : toISODateString(event.date);
       return eventDateStr === cellDateStr;
     });
-  }
-
+  };
 
   const cells: (
     | { type: 'blank' }

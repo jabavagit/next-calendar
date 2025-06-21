@@ -33,12 +33,15 @@ const EventModal: React.FC<EventModalProps> = ({
   setEventTitle,
   editingEvent,
   selectedDate,
-  shifts = []
+  shifts = [],
 }) => {
   const {
-    date, setDate,
-    shift, setShift,
-    newShift, setNewShift,
+    date,
+    setDate,
+    shift,
+    setShift,
+    newShift,
+    setNewShift,
     handleShiftSelect,
     handleNewShiftChange,
   } = useShiftState(editingEvent, selectedDate, shifts);
@@ -57,13 +60,13 @@ const EventModal: React.FC<EventModalProps> = ({
       title: eventTitle,
       shift: shiftToSave,
       isNew: !editingEvent,
-      isEdit: !!editingEvent
+      isEdit: !!editingEvent,
     });
     onClose();
   };
 
   const shiftOptions = [
-    ...shifts.map(shiftOption => ({
+    ...shifts.map((shiftOption) => ({
       value: shiftOption.id,
       label: shiftOption.name,
       color: shiftOption.color,
@@ -72,8 +75,8 @@ const EventModal: React.FC<EventModalProps> = ({
     })),
     {
       value: 'new',
-      label: '+ New shift...'
-    }
+      label: '+ New shift...',
+    },
   ];
 
   if (!open) return null;
@@ -103,11 +106,17 @@ const EventModal: React.FC<EventModalProps> = ({
         <label className="block text-sm font-medium mt-2 mb-1">Shift</label>
         <Select
           className="w-full"
-          value={shiftOptions.find(opt => opt.value === (typeof shift === 'object' ? shift.id : shift))}
-          onChange={option => handleShiftSelect({ target: { value: option?.value?.toString() ?? '' } } as React.ChangeEvent<HTMLSelectElement>)}
+          value={shiftOptions.find(
+            (opt) => opt.value === (typeof shift === 'object' ? shift.id : shift),
+          )}
+          onChange={(option) =>
+            handleShiftSelect({
+              target: { value: option?.value?.toString() ?? '' },
+            } as React.ChangeEvent<HTMLSelectElement>)
+          }
           options={shiftOptions}
-          getOptionLabel={option => option.label}
-          formatOptionLabel={option => (
+          getOptionLabel={(option) => option.label}
+          formatOptionLabel={(option) => (
             <span>
               <span
                 style={{
@@ -121,10 +130,15 @@ const EventModal: React.FC<EventModalProps> = ({
               >
                 {'initials' in option ? option.initials : ''}
               </span>
-              {option.label} {'info' in option && option.info ? <span className="text-xs text-gray-500">{option.info}</span> : ''}
+              {option.label}{' '}
+              {'info' in option && option.info ? (
+                <span className="text-xs text-gray-500">{option.info}</span>
+              ) : (
+                ''
+              )}
             </span>
           )}
-          getOptionValue={option => option.value.toString()}
+          getOptionValue={(option) => option.value.toString()}
         />
         {shift === 'new' && (
           <div className="p-2 rounded bg-gray-200 flex flex-col gap-2">
@@ -133,13 +147,13 @@ const EventModal: React.FC<EventModalProps> = ({
                 className="input input-bordered"
                 placeholder="Shift name"
                 value={newShift.name}
-                onChange={e => handleNewShiftChange('name', e.target.value)}
+                onChange={(e) => handleNewShiftChange('name', e.target.value)}
               />
               <input
                 type="color"
                 className="w-10 h-10"
                 value={newShift.color}
-                onChange={e => handleNewShiftChange('color', e.target.value)}
+                onChange={(e) => handleNewShiftChange('color', e.target.value)}
               />
             </div>
             <div className="flex flex-col md:flex-row p-2 gap-2">
@@ -147,14 +161,14 @@ const EventModal: React.FC<EventModalProps> = ({
                 type="time"
                 className="input input-bordered flex-1"
                 value={newShift.startHour}
-                onChange={e => handleNewShiftChange('startHour', e.target.value)}
+                onChange={(e) => handleNewShiftChange('startHour', e.target.value)}
                 placeholder="Start hour"
               />
               <input
                 type="time"
                 className="input input-bordered flex-1"
                 value={newShift.endHour}
-                onChange={e => handleNewShiftChange('endHour', e.target.value)}
+                onChange={(e) => handleNewShiftChange('endHour', e.target.value)}
                 placeholder="End hour"
               />
             </div>
@@ -164,9 +178,13 @@ const EventModal: React.FC<EventModalProps> = ({
           <button
             className="btn btn-primary btn-sm"
             onClick={handleSave}
-            disabled={!eventTitle || !date || (shift === 'new'
-              ? !newShift.name || !newShift.startHour || !newShift.endHour
-              : typeof shift === 'object' && !shift.id)}
+            disabled={
+              !eventTitle ||
+              !date ||
+              (shift === 'new'
+                ? !newShift.name || !newShift.startHour || !newShift.endHour
+                : typeof shift === 'object' && !shift.id)
+            }
           >
             {editingEvent ? 'Save' : 'Create'}
           </button>

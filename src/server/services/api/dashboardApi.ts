@@ -1,4 +1,3 @@
-
 import { ICalendarExtended, IEventExtended, IShiftExtended } from '@/interfaces/calendar.interface';
 import { getCalendars } from './calendarApi';
 import { getEvents } from './eventsApi';
@@ -9,10 +8,6 @@ export async function getDashboardData(): Promise<{
   events: IEventExtended[];
   shifts: IShiftExtended[];
 }> {
-  const [calendars, events, shifts] = await Promise.all([
-    getCalendars(),
-    getEvents(),
-    getShifts(),
-  ]);
+  const [calendars, events, shifts] = await Promise.all([getCalendars(), getEvents(), getShifts()]);
   return { calendars, events, shifts };
 }

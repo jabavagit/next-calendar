@@ -1,7 +1,4 @@
-import {
-  toEventsExtended,
-  toEventsBase,
-} from '@/libs/event.transformers';
+import { toEventsExtended, toEventsBase } from '@/libs/event.transformers';
 import { apiGet, apiPost, apiPut, apiDelete } from './apiClient';
 import type { IEvent, IEventExtended } from '@/interfaces/calendar.interface';
 
@@ -30,7 +27,9 @@ export async function deleteEvent(id: number): Promise<void> {
 
 // --- Batch endpoints ---
 
-export async function createEventsBatch(events: Omit<IEventExtended, 'id'>[]): Promise<IEventExtended[]> {
+export async function createEventsBatch(
+  events: Omit<IEventExtended, 'id'>[],
+): Promise<IEventExtended[]> {
   const baseEvents = toEventsBase(events as IEventExtended[]);
   const created = await apiPost<IEvent[]>(`${API_URL}/batch`, baseEvents);
   return toEventsExtended(created);

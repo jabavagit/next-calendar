@@ -1,4 +1,4 @@
-import { IEvent, IEventExtended } from "@/interfaces/calendar.interface";
+import { IEvent, IEventExtended } from '@/interfaces/calendar.interface';
 
 // Transforma un IEvent en IEventExtended
 function toEventExtended(event: IEvent): IEventExtended {
@@ -13,8 +13,7 @@ function toEventExtended(event: IEvent): IEventExtended {
 }
 
 // Transforma un array de IEvent en IEventExtended[]
-export const toEventsExtended = (data: IEvent[]): IEventExtended[] =>
-  data.map(toEventExtended);
+export const toEventsExtended = (data: IEvent[]): IEventExtended[] => data.map(toEventExtended);
 
 // Transforma un IEventExtended en IEvent (elimina campos extendidos)
 export function toEventBase(event: IEventExtended): IEvent {

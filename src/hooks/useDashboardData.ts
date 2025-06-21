@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { db } from "@/db/calendarDB";
-import { getDashboardData } from "@/server/services/api/dashboardApi";
-import { ICalendar, IEvent, IShift } from "@/interfaces/calendar.interface";
+import { useEffect, useState } from 'react';
+import { db } from '@/db/calendarDB';
+import { getDashboardData } from '@/server/services/api/dashboardApi';
+import { ICalendar, IEvent, IShift } from '@/interfaces/calendar.interface';
 
 export function useDashboardData() {
   const [calendars, setCalendars] = useState<ICalendar[]>([]);

@@ -6,7 +6,7 @@ interface TooltipInputProps {
   onClose: () => void;
   value: string;
   onChange: (v: string) => void;
-  onConfirm: (newCalendar: Omit<ICalendarExtended, "id">) => Promise<void>
+  onConfirm: (newCalendar: Omit<ICalendarExtended, 'id'>) => Promise<void>;
   onCancel?: () => void;
   confirmLabel?: string;
   cancelLabel?: string;
@@ -63,9 +63,11 @@ const TooltipInput: React.FC<TooltipInputProps> = ({
         autoFocus={autoFocus}
         style={{ minHeight: '36px' }}
       />
-      {<button className="btn btn-sm btn-accent h-9 rounded-none">
-        <span className="text-lg font-bold">+</span>
-      </button>}
+      {
+        <button className="btn btn-sm btn-accent h-9 rounded-none">
+          <span className="text-lg font-bold">+</span>
+        </button>
+      }
       <button
         className="btn btn-sm btn-ghost h-9 rounded-none rounded-r-md"
         style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
