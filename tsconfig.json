@@ -19,25 +19,24 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": "src",
-    "sourceMap": true,
     "paths": {
       "@/*": [
         "*"
       ],
       "@components/*": [
-        "./src/components/*"
+        "components/*"
       ],
       "@pages/*": [
-        "./src/pages/*"
+        "pages/*"
       ],
       "@services/*": [
-        "src/server/services/*"
+        "server/services/*"
       ],
       "@constants/*": [
-        "./src/constants/*"
+        "constants/*"
       ],
       "@interfaces/*": [
-        "./src/interfaces/*"
+        "interfaces/*"
       ]
     },
     "plugins": [

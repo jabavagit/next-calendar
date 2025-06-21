@@ -65,7 +65,7 @@ const DashboardPage: React.FC = () => {
 
     // Si hay un shift nuevo (no tiene id)
     if (event.shift?.isNew) {
-      const newShift = await createShift({ ...event.shift, eventId: event.id });
+      const newShift = await createShift({ ...event.shift });
       setShifts((prev) => [...prev, newShift]);
       shiftId = newShift.id;
     } else if (event.shift?.id) {

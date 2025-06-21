@@ -12,32 +12,11 @@
   {
     "id": 2,
     "calendarId": 1,
-    "title": "Turno farde",
+    "title": "Turno Tarde",
     "date": "2025-06-21T00:00:00.000Z",
     "shiftsId": [
       1750432690573
     ],
     "updatedAt": "2025-06-20T15:20:31.235Z"
-  },
-  {
-    "id": 1750433019399,
-    "calendarId": 1,
-    "title": "Nuevo",
-    "date": "2025-06-18T00:00:00.000Z",
-    "shiftsId": [
-      1750433019238
-    ],
-    "createdAt": "2025-06-20T15:23:39.399Z"
-  },
-  {
-    "id": 1750434467581,
-    "calendarId": 1,
-    "title": "ttt gggg",
-    "date": "2025-06-11",
-    "shiftsId": [
-      1750432690574
-    ],
-    "createdAt": "2025-06-20T15:47:47.581Z",
-    "updatedAt": "2025-06-20T15:47:58.183Z"
   }
 ]

@@ -1,5 +1,5 @@
+import { IShiftExtended } from '@/interfaces/calendar.interface';
 import { apiGet, apiPost, apiPut, apiDelete } from './apiClient';
-import type { IShiftExtended } from '@/interfaces/calendarTypes';
 
 const API_URL = '/api/shifts';
 
