@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import path from 'path';
 import { promises as fs } from 'fs';
-import { toIEvent, type IEvent, type IEventExtended } from '@/interfaces/calendar.interface';
+import { IEvent, IEventExtended } from '@/interfaces/calendar.interface';
+import { toEventBase } from '@/libs/event.transformers';
 
 const filePath = path.join(process.cwd(), 'src', 'server', 'data', 'events.json');
 
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
   try {
     const events = await readEvents();
     const eventExtended: IEventExtended = await request.json();
-    const eventData: IEvent = toIEvent(eventExtended);
+    const eventData: IEvent = toEventBase(eventExtended);
     const newEvent: IEvent = { ...eventData, id: Date.now(), createdAt: new Date().toISOString() };
     events.push(newEvent);
     await writeEvents(events);
@@ -43,7 +44,7 @@ export async function PUT(request: Request) {
     const eventExtended: IEventExtended = await request.json();
     const idx = events.findIndex((e) => e.id === eventExtended.id);
     if (idx === -1) return NextResponse.json({ error: 'No encontrado' }, { status: 404 });
-    const eventData: IEvent = toIEvent(eventExtended);
+    const eventData: IEvent = toEventBase(eventExtended);
     const updated: IEvent = { ...eventData, updatedAt: new Date().toISOString() };
     events[idx] = updated;
     await writeEvents(events);

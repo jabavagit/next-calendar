@@ -18,7 +18,6 @@ export interface ICalendar {
 
 export interface IShift {
   id: number;
-  //eventId?: number;
   name: string;
   color: string;
   startHour: string;
@@ -26,11 +25,6 @@ export interface IShift {
   createdAt?: string;
   updatedAt?: string;
 }
-
-export const toIShift = (shiftExtended: IShiftExtended): IShift => {
-  const { isEdit, isDelete, isNew, dateObject, ...shiftData } = shiftExtended;
-  return shiftData as IShift;
-};
 
 export interface IEvent {
   id: number;
@@ -41,11 +35,6 @@ export interface IEvent {
   createdAt?: string;
   updatedAt?: string;
 }
-
-export const toIEvent = (event: IEventExtended): IEvent => {
-  const { id, calendarId, title, date, shiftsId, createdAt, updatedAt } = event;
-  return { id, calendarId, title, date, shiftsId, createdAt, updatedAt };
-};
 
 export interface IShiftExtended extends IShift {
   isEdit?: boolean;

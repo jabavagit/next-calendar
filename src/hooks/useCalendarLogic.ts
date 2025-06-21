@@ -12,7 +12,7 @@ function toLocalISODate(date: Date) {
 export function useCalendarLogic(
   events: IEventExtended[],
   onSaveEvent: (e: IEventExtended) => void,
-  onDeleteEvent: (e: IEventExtended) => void,
+  onDeleteEvent?: (e: IEventExtended) => void,
 ) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [eventTitle, setEventTitle] = useState('');
@@ -59,7 +59,7 @@ export function useCalendarLogic(
   };
 
   const handleDelete = (event: IEventExtended) => {
-    onDeleteEvent(event);
+    //onDeleteEvent(event);
     setSelectedDate(null);
     setEventTitle('');
     setEditingEvent(null);

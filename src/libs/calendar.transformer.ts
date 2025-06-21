@@ -1,22 +1,27 @@
 import { ICalendar, ICalendarExtended } from "@/interfaces/calendar.interface";
 
+// Transforma un ICalendar en ICalendarExtended
+function toCalendarExtended(calendar: ICalendar): ICalendarExtended {
+  return {
+    ...calendar,
+    type: calendar.type ?? '',
+    active: calendar.active ?? false,
+    isEdit: false,
+    isDelete: false,
+    isNew: false,
+  };
+}
 
-/* export const setCalendarsTransformer = (data: ICalendarExtended): ICalendarExtended[] => {
-  return data.map((calendar) => ({
-    id: calendar.id,
-    name: calendar.name,
-    events: calendar.events.map((event) => ({
-      id: event.id,
-      date: event.date.toISOString(),
-      title: event.title,
-      shiftId: event.shiftId,
-    })),
-    shifts: calendar.shifts?.map((shift) => ({
-      id: shift.id,
-      name: shift.name,
-      color: shift.color,
-      startHour: shift.startHour,
-      endHour: shift.endHour,
-    })) || [],
-  }));
-}; */
+// Transforma un array de ICalendar en ICalendarExtended[]
+export const toCalendarsExtended = (data: ICalendar[]): ICalendarExtended[] =>
+  data.map(toCalendarExtended);
+
+// Transforma un ICalendarExtended en ICalendar (elimina campos extendidos)
+export function toCalendarBase(calendar: ICalendarExtended): ICalendar {
+  const { isEdit, isDelete, isNew, events, shifts, ...base } = calendar;
+  return base;
+}
+
+// Transforma un array de ICalendarExtended en ICalendar[]
+export const toCalendarsBase = (data: ICalendarExtended[]): ICalendar[] =>
+  data.map(toCalendarBase);

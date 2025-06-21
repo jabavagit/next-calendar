@@ -6,6 +6,7 @@
     "dev": "npm run cache:clean && next dev",
     "build": "next build",
     "start": "next start",
+    "build:start": "npm run build && npm run start",
     "lint": "eslint --config .config/eslint/eslint.config.mjs src --ext .js,.jsx,.ts,.tsx",
     "format": "prettier --config .config/prettier/.prettierrc --ignore-path .config/prettier/.prettierignore --write .",
     "format:lint": "npm run format && npm run lint",
@@ -15,7 +16,9 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "autoprefixer": "^10.4.21",
+    "dexie": "^4.0.11",
     "next": "15.3.3",
+    "next-pwa": "^5.6.0",
     "postcss": "^8.5.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
