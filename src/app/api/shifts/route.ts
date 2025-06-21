@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     const shifts = await readShifts();
     const shiftExtended: IShiftExtended = await request.json();
     const shiftData: IShift = toShiftBase(shiftExtended);
-    const newShift: IShift = { ...shiftData, id: Date.now(), createdAt: new Date().toISOString()};
+    const newShift: IShift = { ...shiftData, id: Date.now(), createdAt: new Date().toISOString() };
     shifts.push(newShift);
     await writeShifts(shifts);
     return NextResponse.json(newShift, { status: 201 });
